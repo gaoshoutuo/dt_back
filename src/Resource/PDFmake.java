@@ -1230,6 +1230,7 @@ public class PDFmake {
 
 
             document.close();
+
             pw.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
