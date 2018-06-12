@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="Entity.MonInterfaceSystemEntity" table="mon_interface_system" schema="dtsjwb">
+        <id name="id" column="id"/>
+        <property name="eleSysSoft" column="ele_sys_soft"/>
+        <property name="leakSoft" column="leak_soft"/>
+        <property name="temHumSoft" column="tem_hum_soft"/>
+        <property name="videoSoft" column="video_soft"/>
+        <property name="upsInterface" column="ups_interface"/>
+        <property name="airconInterface" column="aircon_interface"/>
+        <property name="idcNumber" column="idc_number"/>
+    </class>
+</hibernate-mapping>

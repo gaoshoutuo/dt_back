@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="Entity.DeviceParaEntity" table="device_para" schema="dtsjwb">
+        <id name="id" column="id"/>
+        <property name="deviceName" column="device_name"/>
+        <property name="deviceP" column="device_p"/>
+        <property name="deviceT" column="device_t"/>
+        <property name="deviceB" column="device_b"/>
+    </class>
+</hibernate-mapping>

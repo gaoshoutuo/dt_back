@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="Entity.MonSoftSystemEntity" table="mon_soft_system" schema="dtsjwb">
+        <id name="id" column="id"/>
+        <property name="idcMonitor" column="idc_monitor"/>
+        <property name="ieRemote" column="ie_remote"/>
+        <property name="messageWarn" column="message_warn"/>
+        <property name="emailWarn" column="email_warn"/>
+        <property name="idcNumber" column="idc_number"/>
+    </class>
+</hibernate-mapping>
