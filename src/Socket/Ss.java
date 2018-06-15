@@ -8,6 +8,7 @@ import Entity.RegisterUserEntity;
 import Entity.Test3Entity;
 import Entity.TesttableEntity;
 import Resource.InfoUtil;
+import Resource.PDFmake;
 import Resource.TableRegUtil;
 import Resource.TestA;
 import org.json.JSONObject;
@@ -59,12 +60,13 @@ public class Ss   {
                                 sf.append(new String(bytes, 0, len, "UTF-8"));
                             }
                           //  {"age":"15","name","helloworld"}
-                            if(sf.toString().length()>5){
+                            String jsonData=sf.toString();
+                            if(jsonData.length()>5){
 
                                 //JSONObject jsonObject=new JSONObject(sf.toString());这句api 不行
                                 //JSONObject jsonObject=JSONObject.
-                                JSONObject jsonObject=new JSONObject(sf.toString());
-                                System.out.printf(jsonObject.toString());
+                                JSONObject jsonObject=new JSONObject(jsonData);
+                                System.out.printf(jsonData);
 
                                 TestAI testA=new TestA();
                                 TestInfo testInfo=new InfoUtil();
@@ -122,7 +124,39 @@ public class Ss   {
                                     case "dtsjwb":
 
                                         break;
-                                    case "ups_fix":
+                                    case "ups_fix"://ups 修理   1 生成pdf 2 存储 json 及filename path  3 notify nodejs   数据表 应该6个字段 id cus_id  eng_id  json（ 很有可能超了） text timestamp  filepath 加密传输
+                                        //1 生成pdf 及获取文件名
+                                        String upsFixFileName=PDFmake.upsFixPdfMake(jsonObject);
+                                        //2jsondata 存储
+
+                                        // 回执含有 时间 工程师 业务 reasontext filename  的json
+
+
+                                        SocketIOClient.sendMessage(jsonData);
+
+                                        break;
+
+                                    case "ups_ins"://ups 检修
+                                        String upsInsFileName=PDFmake.upsInsPdfMake(jsonObject);
+
+                                        break;
+
+                                    case "ups_test":// ups 测试
+                                        String upsTestFileName=PDFmake.upsTestPdfMake(jsonObject);
+
+                                        break;
+
+                                    case "air_ins":// 空调检修
+                                        String airInsFileName=PDFmake.airInsMakePdf(jsonObject);
+
+                                        break;
+
+                                    case "install": // 安装
+                                        String installFileName=PDFmake.installMakePdf(jsonObject);
+
+                                        break;
+                                    case "service": // 服务
+                                        String serviceFileName=PDFmake.serviceMakePdf(jsonObject);
 
                                         break;
                                     case "ups_notify":

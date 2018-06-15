@@ -44,7 +44,7 @@ public static String jsonUpsIns=" {\"feature_test_1\":{\"inverse\":\"\",\"record
 
         //PDFmake.upsInsPdfMake(new JSONObject(jsonUpsIns));
 
-      String data[]=  ParseJson.getXmls(ParseJson.getFileFile("site_service.xml"));//site_service
+      String data[]=  ParseJson.getXmls(ParseJson.getFileFile("vps_test_report.xml"));//site_service
       for(int i=0;i<data.length;i++){
           if(i%100==99)System.out.println();
           if(data[i]!=null)

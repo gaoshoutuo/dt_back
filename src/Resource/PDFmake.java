@@ -5,9 +5,11 @@ import Util.ParseJson;
 import Util.TimeAndDateUtil;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.*;
+import java.net.MalformedURLException;
 
 public class PDFmake {
     //表头填充
@@ -331,7 +333,7 @@ public class PDFmake {
     /**
      * 表格数据是一行一行加的
      */
-    public static PdfPTable initHeadCell(String[]iu,PdfPTable pt){
+    public static PdfPTable initHeadCell(String[]iu,PdfPTable pt){//居中的
         int colspan=12/iu.length;
         for(int i=0;i<iu.length;i++){//此处注意到底有几条数据.setAlignment(Element.ALIGN_CENTER)
             Paragraph paragraph=new Paragraph(iu[i], fonts[3]);
@@ -350,7 +352,7 @@ public class PDFmake {
     }//不是二维数组  一条一条数据添加 然后最后才for循环
 
     //单层数组
-    public static PdfPTable initCell(String[]iu,PdfPTable pt){
+    public static PdfPTable initCell(String[]iu,PdfPTable pt){//普通的
         int colspan=12/iu.length;
         for(int i=0;i<iu.length;i++){//此处注意到底有几条数据.setAlignment(Element.ALIGN_CENTER)
             Paragraph paragraph=new Paragraph(iu[i], fonts[3]);
@@ -369,18 +371,11 @@ public class PDFmake {
         return pt;
     }//不是二维数组  一条一条数据添加 然后最后才for循环
 
-    public static PdfPTable initCellWithHeight(String[]iu,PdfPTable pt){
+    public static PdfPTable initCellWithHeight(String[]iu,PdfPTable pt){//高度为80
         int colspan=12/iu.length;
         for(int i=0;i<iu.length;i++){//此处注意到底有几条数据.setAlignment(Element.ALIGN_CENTER)
             Paragraph paragraph=new Paragraph(iu[i], fonts[3]);
-         /*   paragraph.setAlignment(Element.ALIGN_CENTER);
-            paragraph.setAlignment(Element.ALIGN_MIDDLE);*/
             PdfPCell cell=new PdfPCell(new Paragraph(iu[i], fonts[3]));
-          /*  cell.setUseAscender(true);
-            cell.setVerticalAlignment(PdfPCell.ALIGN_MIDDLE);
-            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-            cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-*/
             cell.setFixedHeight(80);
             cell.setColspan(colspan);
             pt.addCell(cell);
@@ -389,6 +384,22 @@ public class PDFmake {
     }//不是二维数组  一条一条数据添加 然后最后才for循环
 
     public static void jsonMakeArray(JsonBean jsonBean){
+
+    }
+
+    public static void makeImage(String imageName,PdfPTable pt){
+
+        try {
+            Image imageCus  = Image.getInstance("d:/ftp/"+imageName+".jpg");
+            PdfPCell cellCus=new PdfPCell(imageCus);
+            cellCus.setFixedHeight(80);
+            cellCus.setColspan(6);
+            pt.addCell(cellCus);
+        } catch (BadElementException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -472,7 +483,10 @@ public class PDFmake {
     }
 
     public static void sandWish(String []top,String []mid,String []bottom,PdfPTable pdfPTable){//json 虽然也有长度 但是没办法  有些kong 长度 只有三 没法取
+        if(mid.length==4)
         initCell(new String[]{top[0]+mid[0]+bottom[0],top[1]+mid[1]+bottom[1],top[2]+mid[2]+bottom[2],top[3]+mid[3]+bottom[3]},pdfPTable);
+        else if(mid.length==3)
+            initCell(new String[]{top[0]+mid[0]+bottom[0],top[1]+mid[1]+bottom[1],top[2]+mid[2]+bottom[2]},pdfPTable);
     }
 
     public static void addImage(Document document,String filePath){
@@ -724,7 +738,7 @@ public class PDFmake {
      * @param jsonObject
      */
     //ups维修
-    private String upsFixPdfMake(JSONObject jsonObject){
+    public static String upsFixPdfMake(JSONObject jsonObject){
         //init
         OutputStream os = null;
         long timestamp=TimeAndDateUtil.makeBootstamp();
@@ -806,11 +820,14 @@ public class PDFmake {
 
 
     /**
-     {"cus_sign":"123","ups_ec":"",
+     {"cus_sign":"123","ups_ec":"","ups_status":"",
+     "my_sign":"123","to_sum_up":"","ups_brand":"",
+     "ups_cap":"","ups_type":"","ups_vol":"",
      "ups_t_charging":{"str1":"","str2":"","str0":""},
-     "my_sign":"123","to_sum_up":"","ups_brand":"","ups_cap":"","ups_type":"","ups_vol":"",
+     "ups_ec_charging":{"str1":"","str2":"","str0":""},
+     "ups_t_discha":{"str1":"","str2":"","str0":""},
      "ups_ec_discha":{"str1":"","str2":"","str0":""},
-     "array":[{"ups_dischar_vol":{"str1":"","str2":"","str0":""},"ups_char_vol":{"str1":"","str2":"","str0":""},"internal_resist":""},
+     "array":[{"ups_dischar_vol":{"str1":"","str2":"","str0":""},"ups_char_vol":{"str1":"","str2":"","str0":""},"internal_resist":""},133
      {"ups_dischar_vol":{"str1":"","str2":"","str0":""},"ups_char_vol":{"str1":"","str2":"","str0":""},"internal_resist":""},
      {"ups_dischar_vol":{"str1":"","str2":"","str0":""},"ups_char_vol":{"str1":"","str2":"","str0":""},"internal_resist":""},
      {"ups_dischar_vol":{"str1":"","str2":"","str0":""},"ups_char_vol":{"str1":"","str2":"","str0":""},"internal_resist":""},
@@ -819,13 +836,112 @@ public class PDFmake {
      {"ups_dischar_vol":{"str1":"","str2":"","str0":""},"ups_char_vol":{"str1":"","str2":"","str0":""},"internal_resist":""},
      {"ups_dischar_vol":{"str1":"","str2":"","str0":""},"ups_char_vol":{"str1":"","str2":"","str0":""},"internal_resist":""},
      {"ups_dischar_vol":{"str1":"","str2":"","str0":""},"ups_char_vol":{"str1":"","str2":"","str0":""},"internal_resist":""},
-     {"ups_dischar_vol":{"str1":"","str2":"","str0":""},"ups_char_vol":{"str1":"","str2":"","str0":""},"internal_resist":""}],
-     "ups_t_discha":{"str1":"","str2":"","str0":""},"ups_status":""}
+     {"ups_dischar_vol":{"str1":"","str2":"","str0":""},"ups_char_vol":{"str1":"","str2":"","str0":""},"internal_resist":""}]
+     }
      * @param jsonObject
      */
 
     //ups测试
-    private void upsTestPdfMake(JSONObject jsonObject){//搁着先
+    public static String upsTestPdfMake(JSONObject jsonObject){//搁着先
+        //init
+        OutputStream os = null;
+        long timestamp=TimeAndDateUtil.makeBootstamp();
+        String fileName="d:/ftp/"+timestamp+".pdf";
+        //pdf
+        dataUpsTest=  ParseJson.getXmls(ParseJson.getFileFile("vps_test_report.xml"));
+
+        try {
+            os = new FileOutputStream(new File("d:/ftp/"+timestamp+".pdf"));
+            Document document = new Document(PageSize.A4);
+            PdfWriter pw= PdfWriter.getInstance(document, os);
+            pw.open();
+            document.open();
+            if(fonts==null)initFontArray();
+            //标题
+            Paragraph upsTestTitle = new Paragraph("ups测试报告",fonts[1]);
+            upsTestTitle.setAlignment(Element.ALIGN_CENTER);
+            document.add(upsTestTitle);
+            document.add(Chunk.NEWLINE);
+
+            PdfPTable pdfPTable=initTable(12,new int[]{16,16,16,16,16,16,16,16,16,16,16,16});
+             /* initCell(new String[]{"你若","安好","便是","晴天"},pdfPTable);
+            document.add(pdfPTable); 这样 就会有两行 今天java出bug  可以无限加入的*/
+
+           // 前面几行"cus_sign":"123","ups_ec":"","ups_status":"",
+            //     "my_sign":"123","to_sum_up":"","ups_brand":"",
+            //     "ups_cap":"","ups_type":"","ups_vol":"",
+
+            sandWish(new String[]{dataUpsTest[1],dataUpsTest[2],dataUpsTest[3]},
+                    new String[]{jsonObject.getString("ups_brand"),jsonObject.getString("ups_type"), jsonObject.getString("ups_cap")},
+                    new String[]{"","",""},pdfPTable);
+            sandWish(new String[]{dataUpsTest[4],dataUpsTest[5],dataUpsTest[6]},
+                    new String[]{jsonObject.getString("ups_vol"),jsonObject.getString("ups_status"), jsonObject.getString("ups_ec")},
+                    new String[]{"","",""},pdfPTable);
+
+            // 电池组 133
+            initCell(new String[]{dataUpsTest[9]+dataUpsTest[7]+dataUpsTest[8]+dataUpsTest[7]},pdfPTable);
+
+            //JSONObject cost=ParseJson.getSubjson(jsonObject,"cost");
+            JSONArray ja=jsonObject.getJSONArray("array");
+            for(int i=0;i<ja.length();i++){
+                JSONObject numObj=ja.getJSONObject(i);
+                // {"ups_dischar_vol":{"str1":"","str2":"","str0":""},"ups_char_vol":{"str1":"","str2":"","str0":""},"internal_resist":""},
+                //电池编号及内阻
+                initCell(new String[]{dataUpsTest[12]+":"+(i+1),dataUpsTest[13]+":"+numObj.getString("internal_resist")},pdfPTable);
+                //充电电压
+                JSONObject upsCharVol=numObj.getJSONObject("ups_char_vol");
+                sandWish(new String[]{dataUpsTest[9]+dataUpsTest[14]+"1",dataUpsTest[9]+dataUpsTest[14]+"2",dataUpsTest[9]+dataUpsTest[14]+"3"},
+                        new String[]{upsCharVol.getString("str0"),upsCharVol.getString("str1"), upsCharVol.getString("str2")},
+                        new String[]{"","",""},pdfPTable);
+                //放电电压
+                JSONObject upsDischarVol=numObj.getJSONObject("ups_dischar_vol");
+                sandWish(new String[]{dataUpsTest[8]+dataUpsTest[14]+"1",dataUpsTest[8]+dataUpsTest[14]+"2",dataUpsTest[8]+dataUpsTest[14]+"3"},
+                        new String[]{upsDischarVol.getString("str0"),upsDischarVol.getString("str1"), upsDischarVol.getString("str2")},
+                        new String[]{"","",""},pdfPTable);
+            }
+            // 其他 总结 工程师签名客户签名  工程师单位  客户单位
+            //总结
+            initCellWithHeight(new String[]{dataUpsTest[17]+jsonObject.getString("to_sum_up")},pdfPTable);
+            // 签名
+            //initCellWithHeight(new String[]{dataUpsTest[17]},pdfPTable);
+            Image imageEng = Image.getInstance("d:/ftp/"+jsonObject.getString("my_sign")+".jpg");
+         /*   PdfPCell cellEng=new PdfPCell(imageEng);
+            cellEng.setFixedHeight(80);
+            cellEng.setColspan(6);
+            pdfPTable.addCell(cellEng);*/
+            makeImage(jsonObject.getString("my_sign"),pdfPTable);
+
+         /*   Image imageCus = Image.getInstance("d:/ftp/"+jsonObject.getString("cus_sign")+".jpg");
+            PdfPCell cellCus=new PdfPCell(imageCus);
+            cellCus.setFixedHeight(80);
+            cellCus.setColspan(6);
+            pdfPTable.addCell(cellCus);*/
+            makeImage(jsonObject.getString("cus_sign"),pdfPTable);
+            //
+            sandWish(new String[]{dataUpsTest[8]+dataUpsTest[14]+"1",dataUpsTest[8]+dataUpsTest[14]+"2",dataUpsTest[8]+dataUpsTest[14]+"3",dataUpsTest[8]+dataUpsTest[14]+"3"},
+                    new String[]{jsonObject.getString("str0"),jsonObject.getString("str1"),
+                            jsonObject.getString("str2"),jsonObject.getString("str2")},
+                    new String[]{"","","",""},pdfPTable);
+
+
+
+            document.add(pdfPTable);
+
+
+            document.close();
+            pw.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        // response.setContentType("application/pdf");
+        //Document document = new Document(PageSize.A4.rotate());
+        return fileName;
 
     }
 
@@ -859,7 +975,7 @@ public class PDFmake {
     空重叠导致问题了  反正空 就再gei一次 getString("kong");
      * @param jsonObject 空调检修
      */
-    private String airInsMakePdf(JSONObject jsonObject){
+    public static String airInsMakePdf(JSONObject jsonObject){
 
         //init
         OutputStream os = null;
@@ -1080,7 +1196,7 @@ public class PDFmake {
      * "info":{"install_result":"","material":"","bar_code":"","install_process":""}}
      * @param jsonObject
      */
-    private String installMakePdf(JSONObject jsonObject){
+    public static String installMakePdf(JSONObject jsonObject){
         //init
         OutputStream os = null;
         long timestamp=TimeAndDateUtil.makeBootstamp();
@@ -1168,7 +1284,7 @@ public class PDFmake {
      */
 
     //服务
-    private String serviceMakePdf(JSONObject jsonObject){
+    public static String serviceMakePdf(JSONObject jsonObject){
         //init
         OutputStream os = null;
         long timestamp=TimeAndDateUtil.makeBootstamp();
