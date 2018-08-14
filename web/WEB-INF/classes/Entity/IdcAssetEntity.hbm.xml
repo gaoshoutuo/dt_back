@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="Entity.IdcAssetEntity" table="idc_asset" schema="dtsjwb">
+        <id name="id" column="id"/>
+        <property name="idcId" column="idc_id"/>
+        <property name="idcType" column="idc_type"/>
+        <property name="userId" column="user_id"/>
+        <property name="idcLocationSimple" column="idc_location_simple"/>
+        <property name="upsAsset" column="ups_asset"/>
+        <property name="airAssit" column="air_assit"/>
+        <property name="emiAssit" column="emi_assit"/>
+        <property name="monSoftAssit" column="mon_soft_assit"/>
+        <property name="monSoftInterface" column="mon_soft_interface"/>
+        <property name="monSoftHardware" column="mon_soft_hardware"/>
+        <property name="monSoftAc" column="mon_soft_ac"/>
+        <property name="monVideo" column="mon_video"/>
+        <property name="monCabient" column="mon_cabient"/>
+        <property name="blank1" column="blank_1"/>
+        <property name="blank2" column="blank_2"/>
+        <property name="blank3" column="blank_3"/>
+    </class>
+</hibernate-mapping>

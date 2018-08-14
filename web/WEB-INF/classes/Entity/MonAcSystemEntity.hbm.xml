@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="Entity.MonAcSystemEntity" table="mon_ac_system" schema="dtsjwb">
+        <id name="id" column="id"/>
+        <property name="doubleAc" column="double_ac"/>
+        <property name="douMagnetic" column="dou_magnetic"/>
+        <property name="sinMagnetic" column="sin_magnetic"/>
+        <property name="cardReader" column="card_reader"/>
+        <property name="accessCard" column="access_card"/>
+        <property name="acButton" column="ac_button"/>
+        <property name="acPower" column="ac_power"/>
+        <property name="acControl" column="ac_control"/>
+        <property name="idcNumber" column="idc_number"/>
+    </class>
+</hibernate-mapping>

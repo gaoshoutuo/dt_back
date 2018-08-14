@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="Entity.ItAssertEntity" table="it_assert" schema="dtsjwb">
+        <id name="id" column="id"/>
+        <property name="dateHistory" column="date_history"/>
+        <property name="json1" column="json_1"/>
+        <property name="json2" column="json_2"/>
+        <property name="json3" column="json_3"/>
+        <property name="json4" column="json_4"/>
+        <property name="cusId" column="cus_id"/>
+        <property name="location" column="location"/>
+        <property name="cusName" column="cus_name"/>
+        <property name="company" column="company"/>
+    </class>
+</hibernate-mapping>

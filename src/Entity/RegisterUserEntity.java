@@ -11,12 +11,11 @@ public class RegisterUserEntity {
     private String pwd;
     private String identity;
     private int id;
-
-    public RegisterUserEntity() {
-    }
+    private String location;
+    private String company;
 
     @Basic
-    @Column(name = "name", nullable = false, length = 10)
+    @Column(name = "name")
     public String getName() {
         return name;
     }
@@ -26,7 +25,7 @@ public class RegisterUserEntity {
     }
 
     @Basic
-    @Column(name = "user_id", nullable = false, length = 20)
+    @Column(name = "user_id")
     public String getUserId() {
         return userId;
     }
@@ -36,7 +35,7 @@ public class RegisterUserEntity {
     }
 
     @Basic
-    @Column(name = "pwd", nullable = false, length = 20)
+    @Column(name = "pwd")
     public String getPwd() {
         return pwd;
     }
@@ -46,7 +45,7 @@ public class RegisterUserEntity {
     }
 
     @Basic
-    @Column(name = "identity", nullable = false, length = 20)
+    @Column(name = "identity")
     public String getIdentity() {
         return identity;
     }
@@ -56,13 +55,33 @@ public class RegisterUserEntity {
     }
 
     @Id
-    @Column(name = "id", nullable = false)
+    @Column(name = "id")
     public int getId() {
         return id;
     }
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    @Basic
+    @Column(name = "location")
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    @Basic
+    @Column(name = "company")
+    public String getCompany() {
+        return company;
+    }
+
+    public void setCompany(String company) {
+        this.company = company;
     }
 
     @Override
@@ -74,12 +93,14 @@ public class RegisterUserEntity {
                 Objects.equals(name, that.name) &&
                 Objects.equals(userId, that.userId) &&
                 Objects.equals(pwd, that.pwd) &&
-                Objects.equals(identity, that.identity);
+                Objects.equals(identity, that.identity) &&
+                Objects.equals(location, that.location) &&
+                Objects.equals(company, that.company);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(name, userId, pwd, identity, id);
+        return Objects.hash(name, userId, pwd, identity, id, location, company);
     }
 }

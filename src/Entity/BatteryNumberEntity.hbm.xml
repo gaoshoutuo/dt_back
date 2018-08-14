@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="Entity.BatteryNumberEntity" table="battery_number" schema="dtsjwb">
+        <id name="id" column="id"/>
+        <property name="dateHistory" column="date_history"/>
+        <property name="cusId" column="cus_id"/>
+        <property name="battNumber" column="batt_number"/>
+    </class>
+</hibernate-mapping>

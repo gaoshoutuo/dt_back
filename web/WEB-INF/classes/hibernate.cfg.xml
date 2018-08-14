@@ -1,0 +1,76 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+
+<!--
+  <property name="hibernate.connection.username">root</property>
+        <property name="hibernate.connection.password">DTsj123456,</property>
+-->
+    <session-factory>
+
+        <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/dtsjwb</property>
+        <property name="hibernate.connection.username">root</property>
+        <property name="hibernate.connection.password">DTsj123456,</property>
+        <property name="connection.useUnicode">true</property>
+        <property name="connection.characterEncoding">UTF-8</property>
+        <!-- show_sql: 操作数据库时,会 向控制台打印sql语句   果然hib也要设置utf-8-->
+        <property name="show_sql">true</property>
+        <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+
+
+        <!-- format_sql: 打印sql语句前,会将sql语句先格式化  -->
+        <property name="format_sql">true</property>
+        <mapping class="Entity.InfoEntity"/>
+        <mapping class="Entity.TesttableEntity"></mapping>
+      <!--  <mapping resource="Entity/RegisterUserEntity.hbm.xml"/>-->
+       <!-- mapping 需要自己加 不然cfg会被改变-->
+        <mapping class="Entity.Test3Entity"></mapping>
+
+        <mapping class="Entity.AirSystemEntity"/>
+        <mapping resource="Entity/AirSystemEntity.hbm.xml"/>
+        <mapping class="Entity.CabientSystemEntity"/>
+        <mapping resource="Entity/CabientSystemEntity.hbm.xml"/>
+        <mapping class="Entity.CustomInfoEntity"/>
+        <mapping resource="Entity/CustomInfoEntity.hbm.xml"/>
+        <mapping class="Entity.DeviceParaEntity"/>
+        <mapping resource="Entity/DeviceParaEntity.hbm.xml"/>
+        <mapping class="Entity.EleSystemEntity"/>
+        <mapping resource="Entity/EleSystemEntity.hbm.xml"/>
+        <mapping class="Entity.EmiSystemEntity"/>
+        <mapping resource="Entity/EmiSystemEntity.hbm.xml"/>
+        <mapping class="Entity.MonAcSystemEntity"/>
+        <mapping resource="Entity/MonAcSystemEntity.hbm.xml"/>
+        <mapping class="Entity.MonHardSystemEntity"/>
+        <mapping resource="Entity/MonHardSystemEntity.hbm.xml"/>
+        <mapping class="Entity.MonInterfaceSystemEntity"/>
+        <mapping resource="Entity/MonInterfaceSystemEntity.hbm.xml"/>
+        <mapping class="Entity.MonSoftSystemEntity"/>
+        <mapping resource="Entity/MonSoftSystemEntity.hbm.xml"/>
+        <mapping class="Entity.MonVideoSystemEntity"/>
+        <mapping resource="Entity/MonVideoSystemEntity.hbm.xml"/>
+
+        <mapping resource="Entity/RegisterUserEntity.hbm.xml"/>
+        <mapping class="Entity.RegisterUserEntity"/>
+        <mapping resource="Entity/LoginRecordEntity.hbm.xml"/>
+        <mapping class="Entity.LoginRecordEntity"/>
+        <mapping resource="Entity/FixTestInsHistoryEntity.hbm.xml"/>
+        <mapping class="Entity.FixTestInsHistoryEntity"/>
+        <mapping resource="Entity/AssertEntity.hbm.xml"/>
+        <mapping class="Entity.AssertEntity"/>
+        <mapping resource="Entity/BatteryNumberEntity.hbm.xml"/>
+        <mapping class="Entity.BatteryNumberEntity"/>
+        <mapping class="Entity.ItAssertEntity"/>
+        <mapping resource="Entity/ItAssertEntity.hbm.xml"/>
+        <mapping resource="Entity/AgreeTableEntity.hbm.xml"/>
+        <mapping class="Entity.AgreeTableEntity"/>
+        <mapping resource="Entity/IdcInfoEntity.hbm.xml"/>
+        <mapping class="Entity.IdcInfoEntity"/>
+        <mapping resource="Entity/IdcAssetEntity.hbm.xml"/>
+        <mapping class="Entity.IdcAssetEntity"/>
+
+
+    </session-factory>
+</hibernate-configuration>

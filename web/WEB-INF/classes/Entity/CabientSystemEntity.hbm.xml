@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="Entity.CabientSystemEntity" table="cabient_system" schema="dtsjwb">
+        <id name="id" column="id"/>
+        <property name="coldItCab" column="cold_it_cab"/>
+        <property name="cabLine" column="cab_line"/>
+        <property name="cabVerticalLine" column="cab_vertical_line"/>
+        <property name="cabBottomLine" column="cab_bottom_line"/>
+        <property name="coldBackDoor" column="cold_back_door"/>
+        <property name="cabBlind" column="cab_blind"/>
+        <property name="coldSunroof" column="cold_sunroof"/>
+        <property name="sunroofEle" column="sunroof_ele"/>
+        <property name="coldClose" column="cold_close"/>
+        <property name="coldCompont" column="cold_compont"/>
+        <property name="coldLight" column="cold_light"/>
+        <property name="cabLight" column="cab_light"/>
+        <property name="eleCollection" column="ele_collection"/>
+        <property name="cabHead" column="cab_head"/>
+        <property name="coldBase" column="cold_base"/>
+        <property name="idcNumber" column="idc_number"/>
+    </class>
+</hibernate-mapping>

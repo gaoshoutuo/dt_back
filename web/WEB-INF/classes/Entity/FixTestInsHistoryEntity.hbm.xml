@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="Entity.FixTestInsHistoryEntity" table="fix_test_ins_history" schema="dtsjwb">
+        <id name="id" column="id"/>
+        <property name="dateHistory" column="date_history"/>
+        <property name="json1" column="json_1"/>
+        <property name="json2" column="json_2"/>
+        <property name="textHistory" column="text_history"/>
+        <property name="business" column="business"/>
+        <property name="filepath" column="filepath"/>
+        <property name="userId" column="user_id"/>
+        <property name="human" column="human"/>
+        <property name="engId" column="eng_id"/>
+    </class>
+</hibernate-mapping>

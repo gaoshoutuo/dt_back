@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="Entity.RegisterUserEntity" table="register_user" schema="dtsjwb">
+        <id name="id" column="id"/>
+        <property name="name" column="name"/>
+        <property name="userId" column="user_id"/>
+        <property name="pwd" column="pwd"/>
+        <property name="identity" column="identity"/>
+        <property name="location" column="location"/>
+        <property name="company" column="company"/>
+    </class>
+</hibernate-mapping>

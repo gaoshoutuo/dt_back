@@ -11,6 +11,15 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 
 public class HibUtil {
 
+    /**
+     * 必须有一个唯一单例 不然直接占了1GB内存实在是不应该
+     */
+    public static HibUtil instance;
+    public static HibUtil getInstance(){
+        if (instance==null)instance=new HibUtil();
+        return instance;
+    }
+
     public StandardServiceRegistry standardRegistry = new StandardServiceRegistryBuilder()
             .configure()
             .build();

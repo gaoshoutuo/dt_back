@@ -1,7 +1,6 @@
 package DAO;
 
 import Entity.RegisterUserEntity;
-import Entity.TesttableEntity;
 
 import java.util.List;
 

@@ -682,14 +682,14 @@ public class PDFmake {
             JSONObject hardTest=ParseJson.getSubjson(jsonObject,"hard_test");
             initHeadCell(new String[]{dataUpsIns[600]},pdfPTable);
 
-            initHeadCell(new String[]{dataUpsIns[44]+hardTest.getString("hard1")},pdfPTable);
-            initHeadCell(new String[]{dataUpsIns[45]+hardTest.getString("hard2")},pdfPTable);
-            initHeadCell(new String[]{dataUpsIns[46]+hardTest.getString("hard3")},pdfPTable);
-            initHeadCell(new String[]{dataUpsIns[47]+hardTest.getString("hard4")},pdfPTable);
-            initHeadCell(new String[]{dataUpsIns[48]+hardTest.getString("hard5")},pdfPTable);
-            initHeadCell(new String[]{dataUpsIns[49]+hardTest.getString("hard6")},pdfPTable);
-            initHeadCell(new String[]{dataUpsIns[490]+hardTest.getString("hard7")},pdfPTable);
-            initHeadCell(new String[]{dataUpsIns[491]+hardTest.getString("hard8")},pdfPTable);
+            initHeadCell(new String[]{dataUpsIns[44]+hardTest.getString("hard0")},pdfPTable);
+            initHeadCell(new String[]{dataUpsIns[45]+hardTest.getString("hard1")},pdfPTable);
+            initHeadCell(new String[]{dataUpsIns[46]+hardTest.getString("hard2")},pdfPTable);
+            initHeadCell(new String[]{dataUpsIns[47]+hardTest.getString("hard3")},pdfPTable);
+            initHeadCell(new String[]{dataUpsIns[48]+hardTest.getString("hard4")},pdfPTable);
+            initHeadCell(new String[]{dataUpsIns[49]+hardTest.getString("hard5")},pdfPTable);
+            initHeadCell(new String[]{dataUpsIns[490]+hardTest.getString("hard6")},pdfPTable);
+            initHeadCell(new String[]{dataUpsIns[491]+hardTest.getString("hard7")},pdfPTable);
 
             //其他  au img suggest opinion  time step way
 
@@ -769,35 +769,35 @@ public class PDFmake {
             initCell(new String[]{"体系架构","网络","数据结构","操作系统"},pdfPTable);*/
             //散列
             initCell(new String[]{dataUpsFix[1]+jsonObject.getString("contacts")},pdfPTable);
-            sandWish(new String[]{dataUpsIns[1],dataUpsIns[2],dataUpsIns[3],dataUpsIns[4]},
+            sandWish(new String[]{dataUpsFix[1],dataUpsFix[2],dataUpsFix[3],dataUpsFix[4]},
                     new String[]{jsonObject.getString("cus_name"),jsonObject.getString("contacts"),
                     jsonObject.getString("phone_number"),jsonObject.getString("location")},
                     new String[]{"","","",""},pdfPTable);
-            sandWish(new String[]{dataUpsIns[5],dataUpsIns[6],dataUpsIns[7],dataUpsIns[8]},
+            sandWish(new String[]{dataUpsFix[5],dataUpsFix[6],dataUpsFix[7],dataUpsFix[8]},
                     new String[]{jsonObject.getString("device_brand"),jsonObject.getString("device_t"),
                             jsonObject.getString("device_power"),jsonObject.getString("device_id")},
                     new String[]{"","","",""},pdfPTable);
-            sandWish(new String[]{dataUpsIns[9],dataUpsIns[10],dataUpsIns[11],dataUpsIns[12]},
+            sandWish(new String[]{dataUpsFix[9],dataUpsFix[10],dataUpsFix[11],dataUpsFix[12]},
                     new String[]{jsonObject.getString("device_work_pattern"),jsonObject.getString("error_time"),
                             jsonObject.getString("fix_time"),jsonObject.getString("fix_location")},
                     new String[]{"","","",""},pdfPTable);
 
 
             //故障
-            initCell(new String[]{dataUpsIns[100]},pdfPTable);
-            initCellWithHeight(new String[]{dataUpsIns[13]+jsonObject.getString("error_phon")},pdfPTable);
-            initCellWithHeight(new String[]{dataUpsIns[14]+jsonObject.getString("error_analysis")},pdfPTable);
-            initCellWithHeight(new String[]{dataUpsIns[15]+jsonObject.getString("handle_error")},pdfPTable);
-            initCellWithHeight(new String[]{dataUpsIns[16]+jsonObject.getString("fix_reason")},pdfPTable);
+            initCell(new String[]{dataUpsFix[100]},pdfPTable);
+            initCellWithHeight(new String[]{dataUpsFix[13]+jsonObject.getString("error_phon")},pdfPTable);
+            initCellWithHeight(new String[]{dataUpsFix[14]+jsonObject.getString("error_analysis")},pdfPTable);
+            initCellWithHeight(new String[]{dataUpsFix[15]+jsonObject.getString("handle_error")},pdfPTable);
+            initCellWithHeight(new String[]{dataUpsFix[16]+jsonObject.getString("fix_reason")},pdfPTable);
 
             //cost "warr_inner":"","materal":"","sum_cost":"","Maintenance":"","transport":"","travel":"","warr_out":"","labor":""
             JSONObject cost=ParseJson.getSubjson(jsonObject,"cost");
-            initCell(new String[]{dataUpsIns[17]},pdfPTable);
-            sandWish(new String[]{dataUpsIns[18],dataUpsIns[19],dataUpsIns[20],dataUpsIns[21]},
+            initCell(new String[]{dataUpsFix[17]},pdfPTable);
+            sandWish(new String[]{dataUpsFix[18],dataUpsFix[19],dataUpsFix[20],dataUpsFix[21]},
                     new String[]{cost.getString("Maintenance"),cost.getString("warr_inner"),
                             cost.getString("warr_out"),cost.getString("labor")},
                     new String[]{"","","",""},pdfPTable);
-            sandWish(new String[]{dataUpsIns[22],dataUpsIns[23],dataUpsIns[24],dataUpsIns[25]},
+            sandWish(new String[]{dataUpsFix[22],dataUpsFix[23],dataUpsFix[24],dataUpsFix[25]},
                     new String[]{cost.getString("materal"),cost.getString("travel"),
                             cost.getString("transport"),cost.getString("sum_cost")},
                     new String[]{"","","",""},pdfPTable);
@@ -1212,7 +1212,7 @@ public class PDFmake {
             document.open();
             if(fonts==null)initFontArray();
             //标题
-            Paragraph upsTestTitle = new Paragraph("ups测试报告",fonts[1]);
+            Paragraph upsTestTitle = new Paragraph("现场安装报告",fonts[1]);
             upsTestTitle.setAlignment(Element.ALIGN_CENTER);
             document.add(upsTestTitle);
             document.add(Chunk.NEWLINE);
@@ -1302,7 +1302,7 @@ public class PDFmake {
             document.open();
             if(fonts==null)initFontArray();
             //标题
-            Paragraph upsTestTitle = new Paragraph("ups测试报告",fonts[1]);
+            Paragraph upsTestTitle = new Paragraph("现场服务报告",fonts[1]);
             upsTestTitle.setAlignment(Element.ALIGN_CENTER);
             document.add(upsTestTitle);
             document.add(Chunk.NEWLINE);
@@ -1323,8 +1323,8 @@ public class PDFmake {
             JSONObject info=ParseJson.getSubjson(jsonObject,"info");
             initCell(new String[]{dataService[400]},pdfPTable);
             sandWish(new String[]{dataService[5],dataService[14],dataService[15],dataService[16]},
-                    new String[]{info.getString("custom_name"),info.getString("custom_contacts"),
-                            info.getString("phone_num"),info.getString("custom_location")},
+                    new String[]{info.getString("service_pro"),info.getString("error_phon"),
+                            info.getString("handle_error"),info.getString("fix_reason")},
                     new String[]{"","","",""},pdfPTable);
 
             //维修费用
@@ -1341,7 +1341,7 @@ public class PDFmake {
 
 
             //其他信息
-            initCell(new String[]{dataInstall[300]},pdfPTable);
+            initCell(new String[]{dataService[300]},pdfPTable);
             document.add(pdfPTable);
 
 

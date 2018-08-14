@@ -5,20 +5,12 @@
 <hibernate-mapping>
 
     <class name="Entity.RegisterUserEntity" table="register_user" schema="dtsjwb">
-        <id name="id">
-            <column name="id" sql-type="int(11)"/>
-        </id>
-        <property name="name">
-            <column name="name" sql-type="varchar(10)" length="10"/>
-        </property>
-        <property name="userId">
-            <column name="user_id" sql-type="varchar(20)" length="20"/>
-        </property>
-        <property name="pwd">
-            <column name="pwd" sql-type="varchar(20)" length="20"/>
-        </property>
-        <property name="identity">
-            <column name="identity" sql-type="varchar(20)" length="20"/>
-        </property>
+        <id name="id" column="id"/>
+        <property name="name" column="name"/>
+        <property name="userId" column="user_id"/>
+        <property name="pwd" column="pwd"/>
+        <property name="identity" column="identity"/>
+        <property name="location" column="location"/>
+        <property name="company" column="company"/>
     </class>
 </hibernate-mapping>

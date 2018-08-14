@@ -1,0 +1,33 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="hey">
+    <output-path>$PROJECT_DIR$/web/WEB-INF/classes</output-path>
+    <root id="archive" name="hey.war">
+      <element id="javaee-facet-resources" facet="DTSJ/web/Web" />
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="DTSJ" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="log4j:log4j:1.2.17" />
+          <element id="library" level="project" name="Hibernate 5.2.16-5.2.16" />
+          <element id="library" level="module" name="JUnit5.0" module-name="DTSJ" />
+          <element id="library" level="project" name="org.thymeleaf:thymeleaf:Release" />
+          <element id="library" level="project" name="Spring-4.3.16.RELEASE" />
+          <element id="library" level="project" name="Spring MVC-4.3.16.RELEASE" />
+          <element id="file-copy" path="C:/Program Files/Java/jdk-10/lib/missioncontrol/plugins/jaxb-api-2.3.0.jar" />
+          <element id="file-copy" path="C:/Program Files/Java/jdk-10/lib/missioncontrol/plugins/jaxb-core-2.3.0.jar" />
+          <element id="file-copy" path="C:/Program Files/Java/jdk-10/lib/missioncontrol/plugins/jaxb-impl-2.3.0.jar" />
+          <element id="file-copy" path="C:/Program Files/Java/jdk-10/lib/missioncontrol/plugins/javax.activation-1.2.0.jar" />
+          <element id="library" level="project" name="mysql:mysql-connector-java:5.1.12" />
+          <element id="library" level="project" name="org.json:json:20140107" />
+          <element id="file-copy" path="D:/ftp/json-lib-2.4-jdk15.jar" />
+          <element id="library" level="project" name="io.socket:socket.io-client:1.0.0" />
+          <element id="file-copy" path="D:/ftp/commons-net-3.0.1.jar" />
+          <element id="library" level="project" name="com.itextpdf:itextpdf:5.5.0" />
+          <element id="library" level="project" name="com.itextpdf:itext-asian:5.2.0" />
+          <element id="library" level="project" name="org.springframework.boot:spring-boot-autoconfigure:1.2.3.RELEASE" />
+        </element>
+      </element>
+    </root>
+  </artifact>
+</component>
