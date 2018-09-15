@@ -12,5 +12,7 @@
         <property name="identity" column="identity"/>
         <property name="location" column="location"/>
         <property name="company" column="company"/>
+        <property name="industry" column="industry"/>
+        <property name="email" column="email"/>
     </class>
 </hibernate-mapping>

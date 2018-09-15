@@ -1,9 +1,7 @@
 package Resource;
 
 import DAO.IdcAssetDao;
-import Entity.IdcAssetEntity;
-import Entity.LoginRecordEntity;
-import Entity.TesttableEntity;
+import Entity.*;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
@@ -26,6 +24,26 @@ public class IdcAssetUtil implements IdcAssetDao {
         entity.setIdcType( jsonObject.getString("idc_type"));
         entity.setIdcLocationSimple(jsonObject.getString("idc_location_simple"));
         entity.setUserId(jsonObject.getString("user_id"));
+
+        //此处也给  维保表添加一条记录
+      /*  CountDownUtil cdu=new CountDownUtil();
+        CountDownEntity cde=new CountDownEntity();
+
+
+        cde.setAirTime(90);
+        cde.setUpsTime(90);
+        cde.setIdcId(entity.getIdcId());
+        cde.setIdcLocation(entity.getIdcLocationSimple());
+        cde.setUserId(entity.getUserId());
+        RegisterUserEntity rue1=TableRegUtil.getInstance().queryInID(entity.getUserId());
+        cde.setUserName(rue1.getName());
+        cdu.add(cde);*/
+        CountDownUtil cdu=new CountDownUtil();
+        cdu.addCountDown(entity.getIdcId(),entity.getIdcLocationSimple(),entity.getUserId());
+
+
+
+
         return entity;
     }
 
@@ -230,34 +248,34 @@ public class IdcAssetUtil implements IdcAssetDao {
                 queryJson=upsQuery(idcId);
                 break;
             case "sub_air":
-
+                queryJson=airQuery(idcId);
                 break;
             case "sub_emi":
-
+                queryJson=emiQuery(idcId);
                 break;
 
             case "sub_ms":
-
+                queryJson=msQuery(idcId);
                 break;
 
             case "sub_mi":
-
+                queryJson=miQuery(idcId);
                 break;
 
             case "sub_mh":
-
+                queryJson=mhQuery(idcId);
                 break;
 
             case "sub_mac":
-
+                queryJson=macQuery(idcId);
                 break;
 
             case "sub_mv":
-
+                queryJson=mvQuery(idcId);
                 break;
 
             case "sub_cab":
-
+                queryJson=cabQuery(idcId);
                 break;
 
                 default:break;
@@ -275,48 +293,119 @@ public class IdcAssetUtil implements IdcAssetDao {
         query.setParameter("idcid",idcId);
        String upsAsset=(String)query.uniqueResult();
        System.out.println(upsAsset+"----------ups查询成功-------");
-        //查询出来的东西不能拿来做成实体
         hibUtil.commitClose();
         return upsAsset;
     }
 
     //airquery
     private String airQuery(String idcId){
-        return null;
+        HibUtil hibUtil= new HibUtil();
+        hibUtil.openSession();
+        Session session=hibUtil.getSession();
+        String hql="select  iae.airAssit from IdcAssetEntity iae where iae.idcId=:idcid";
+        Query query=session.createQuery(hql);
+        query.setParameter("idcid",idcId);
+        String airAsset=(String)query.uniqueResult();
+        System.out.println(airAsset+"----------air查询成功-------");
+        hibUtil.commitClose();
+        return airAsset;
     }
 
     //emiquery
     private String emiQuery(String idcId){
-        return null;
+        HibUtil hibUtil= new HibUtil();
+        hibUtil.openSession();
+        Session session=hibUtil.getSession();
+        String hql="select  iae.emiAssit from IdcAssetEntity iae where iae.idcId=:idcid";
+        Query query=session.createQuery(hql);
+        query.setParameter("idcid",idcId);
+        String emiAsset=(String)query.uniqueResult();
+        System.out.println(emiAsset+"----------emi查询成功-------");
+        hibUtil.commitClose();
+        return emiAsset;
     }
 
     //msquery
     private String msQuery(String idcId){
-        return null;
+        HibUtil hibUtil= new HibUtil();
+        hibUtil.openSession();
+        Session session=hibUtil.getSession();
+        String hql="select  iae.monSoftAssit from IdcAssetEntity iae where iae.idcId=:idcid";
+        Query query=session.createQuery(hql);
+        query.setParameter("idcid",idcId);
+        String msAsset=(String)query.uniqueResult();
+        System.out.println(msAsset+"----------ms查询成功-------");
+        hibUtil.commitClose();
+        return msAsset;
     }
 
     //miquery
     private String miQuery(String idcId){
-        return null;
+        HibUtil hibUtil= new HibUtil();
+        hibUtil.openSession();
+        Session session=hibUtil.getSession();
+        String hql="select  iae.monSoftInterface from IdcAssetEntity iae where iae.idcId=:idcid";
+        Query query=session.createQuery(hql);
+        query.setParameter("idcid",idcId);
+        String miAsset=(String)query.uniqueResult();
+        System.out.println(miAsset+"----------mi查询成功-------");
+        hibUtil.commitClose();
+        return miAsset;
     }
 
     //mhquery
     private String mhQuery(String idcId){
-        return null;
+        HibUtil hibUtil= new HibUtil();
+        hibUtil.openSession();
+        Session session=hibUtil.getSession();
+        String hql="select  iae.monSoftHardware from IdcAssetEntity iae where iae.idcId=:idcid";
+        Query query=session.createQuery(hql);
+        query.setParameter("idcid",idcId);
+        String mhAsset=(String)query.uniqueResult();
+        System.out.println(mhAsset+"----------mh查询成功-------");
+        hibUtil.commitClose();
+        return mhAsset;
     }
 
     //macquery
     private String macQuery(String idcId){
-        return null;
+        HibUtil hibUtil= new HibUtil();
+        hibUtil.openSession();
+        Session session=hibUtil.getSession();
+        String hql="select  iae.monSoftAc from IdcAssetEntity iae where iae.idcId=:idcid";
+        Query query=session.createQuery(hql);
+        query.setParameter("idcid",idcId);
+        String macAsset=(String)query.uniqueResult();
+        System.out.println(macAsset+"----------mac查询成功-------");
+        hibUtil.commitClose();
+        return macAsset;
     }
 
     //mvquery
     private String mvQuery(String idcId){
-        return null;
+        HibUtil hibUtil= new HibUtil();
+        hibUtil.openSession();
+        Session session=hibUtil.getSession();
+        String hql="select  iae.monVideo from IdcAssetEntity iae where iae.idcId=:idcid";
+        Query query=session.createQuery(hql);
+        query.setParameter("idcid",idcId);
+        String mvAsset=(String)query.uniqueResult();
+        System.out.println(mvAsset+"----------mv查询成功-------");
+        hibUtil.commitClose();
+        return mvAsset;
     }
 
     //cabquery
     private String cabQuery(String idcId){
-        return null;
+        HibUtil hibUtil= new HibUtil();
+        hibUtil.openSession();
+        Session session=hibUtil.getSession();
+        String hql="select  iae.monCabient from IdcAssetEntity iae where iae.idcId=:idcid";
+        Query query=session.createQuery(hql);
+        query.setParameter("idcid",idcId);
+        String cabAsset=(String)query.uniqueResult();
+        System.out.println(cabAsset+"----------cab查询成功-------");
+        hibUtil.commitClose();
+        return cabAsset;
     }
 }

@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="com.sun.mail:mailapi:1.5.0" type="repository">
+    <properties maven-id="com.sun.mail:mailapi:1.5.0" />
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/mailapi-1.5.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/activation-1.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

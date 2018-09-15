@@ -11,6 +11,7 @@ public class BatteryNumberEntity {
     private Timestamp dateHistory;
     private String cusId;
     private int battNumber;
+    private String idcId;
 
     @Id
     @Column(name = "id")
@@ -67,5 +68,15 @@ public class BatteryNumberEntity {
     public int hashCode() {
 
         return Objects.hash(id, dateHistory, cusId, battNumber);
+    }
+
+    @Basic
+    @Column(name = "idc_id")
+    public String getIdcId() {
+        return idcId;
+    }
+
+    public void setIdcId(String idcId) {
+        this.idcId = idcId;
     }
 }

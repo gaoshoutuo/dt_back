@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="Entity.UpsAirAnyEntity" table="ups_air_any" schema="dtsjwb">
+        <id name="id" column="id"/>
+        <property name="idcId" column="idc_id"/>
+        <property name="idcName" column="idc_name"/>
+        <property name="idcType" column="idc_type"/>
+        <property name="idcLocationSimple" column="idc_location_simple"/>
+        <property name="jsonData" column="json_data"/>
+        <property name="cusId" column="cus_id"/>
+        <property name="deviceType" column="device_type"/>
+        <property name="blank1" column="blank_1"/>
+        <property name="blank2" column="blank_2"/>
+        <property name="blank3" column="blank_3"/>
+        <property name="blank4" column="blank_4"/>
+    </class>
+</hibernate-mapping>

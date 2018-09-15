@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="Entity.HotJsonEntity" table="hot_json" schema="dtsjwb">
+        <id name="id" column="id"/>
+        <property name="hotjson1" column="hotjson1"/>
+        <property name="hotjson2" column="hotjson2"/>
+        <property name="hotjson3" column="hotjson3"/>
+        <property name="hotjson4" column="hotjson4"/>
+        <property name="hotjson5" column="hotjson5"/>
+        <property name="userId" column="user_id"/>
+        <property name="userName" column="user_name"/>
+        <property name="blank1" column="blank_1"/>
+        <property name="blank2" column="blank_2"/>
+        <property name="blank3" column="blank_3"/>
+        <property name="blank4" column="blank_4"/>
+        <property name="blank5" column="blank_5"/>
+    </class>
+</hibernate-mapping>

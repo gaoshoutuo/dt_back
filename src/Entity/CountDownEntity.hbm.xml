@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="Entity.CountDownEntity" table="count_down" schema="dtsjwb">
+        <id name="id" column="id"/>
+        <property name="engId" column="eng_id"/>
+        <property name="userId" column="user_id"/>
+        <property name="userName" column="user_name"/>
+        <property name="idcId" column="idc_id"/>
+        <property name="idcName" column="idc_name"/>
+        <property name="idcLocation" column="idc_location"/>
+        <property name="idcType" column="idc_type"/>
+        <property name="upsTime" column="ups_time"/>
+        <property name="airTime" column="air_time"/>
+        <property name="anotherTime1" column="another_time_1"/>
+        <property name="anotherTime2" column="another_time_2"/>
+        <property name="anotherTime3" column="another_time_3"/>
+        <property name="anotherTime4" column="another_time_4"/>
+        <property name="anotherTime5" column="another_time_5"/>
+        <property name="anotherTime6" column="another_time_6"/>
+        <property name="anotherTime7" column="another_time_7"/>
+        <property name="flagSet" column="flag_set"/>
+    </class>
+</hibernate-mapping>

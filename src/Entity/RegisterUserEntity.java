@@ -13,6 +13,8 @@ public class RegisterUserEntity {
     private int id;
     private String location;
     private String company;
+    private String industry;
+    private String email;
 
     @Basic
     @Column(name = "name")
@@ -102,5 +104,25 @@ public class RegisterUserEntity {
     public int hashCode() {
 
         return Objects.hash(name, userId, pwd, identity, id, location, company);
+    }
+
+    @Basic
+    @Column(name = "industry")
+    public String getIndustry() {
+        return industry;
+    }
+
+    public void setIndustry(String industry) {
+        this.industry = industry;
+    }
+
+    @Basic
+    @Column(name = "email")
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

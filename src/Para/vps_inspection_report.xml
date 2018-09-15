@@ -100,5 +100,24 @@
     <name class="053">客户签字</name>
     <name class="054">单位名称</name>
     <name class="055">日期</name>
+
+    <name class="906">客户ID</name>
+    <name class="907">工程师ID</name>
+    <name class="908">工程师姓名</name>
+    <name class="909">服务时间</name>
+
+    <name class="911">机房四项</name>
+    <name class="912">机房ID</name>
+    <name class="913">机房名称</name>
+    <name class="914">机房地区</name>
+    <name class="915">机房TYPE</name>
+
+    <name class="921">工程师签名</name>
+    <name class="922">客户签名</name>
+    <name class="923">其他信息</name>
+    <name class="924">机器编号</name>
+    <name class="925">结果</name>
+    <name class="926">遗留问题</name>
+    <name class="927">维护过程</name>
 </root>
 <!--为啥要写成文件 而不是内存数组这样直观呢   复杂了-->

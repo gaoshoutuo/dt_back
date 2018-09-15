@@ -5,18 +5,21 @@ import Util.ParseJson;
 import Util.TimeAndDateUtil;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
+import org.apache.commons.net.ntp.TimeStamp;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.*;
 import java.net.MalformedURLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class PDFmake {
     //表头填充
     private static BaseColor bc = new BaseColor(255, 255, 255);
     public static com.itextpdf.text.Font[] fonts;
     public static String xmlDataUpsIns,xmlDataUpsFix,xmlDataUpsTest,xmlDataAirIns,xmlDataService,xmlDataInstall;
-    public static String dataUpsIns[],dataUpsFix[],dataUpsTest[],dataAirIns[],dataService[],dataInstall[];
+    public static String dataUpsIns[],dataUpsFix[],dataUpsTest[],dataAirIns[],dataService[],dataInstall[],dataAirInspection[],dataAirFix[],dataAirInstall[];
 
     /**
      * 第一种是 内部类结构  第二种是子类继承结构
@@ -383,6 +386,51 @@ public class PDFmake {
         return pt;
     }//不是二维数组  一条一条数据添加 然后最后才for循环
 
+
+    public static PdfPTable cellAndImage(String []arr,String engSign,String cusSign,PdfPTable pt){//高度为80
+        int colspan=12/4;
+
+        try {
+            PdfPCell cellText1=new PdfPCell(new Paragraph(arr[0], fonts[3]));
+            cellText1.setFixedHeight(80);
+            cellText1.setColspan(colspan);
+            pt.addCell(cellText1);
+
+
+            //image1
+            Image image1=Image.getInstance(engSign);
+            image1.scaleAbsolute(40f,70f);
+            image1.setAlignment(Image.MIDDLE);
+            PdfPCell cell=new PdfPCell(image1);
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setHorizontalAlignment(Element.ALIGN_MIDDLE);
+            cell.setFixedHeight(80);
+            cell.setColspan(colspan);
+            pt.addCell(cell);
+
+            PdfPCell cellText2=new PdfPCell(new Paragraph(arr[1], fonts[3]));
+            cellText2.setFixedHeight(80);
+            cellText2.setColspan(colspan);
+            pt.addCell(cellText2);
+
+            //image2
+            Image image2=Image.getInstance(cusSign);
+            image2.scaleAbsolute(40f,70f);
+            image2.setAlignment(Image.MIDDLE);
+            PdfPCell cell2=new PdfPCell(image2);
+            cell2.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell2.setHorizontalAlignment(Element.ALIGN_MIDDLE);
+            cell2.setFixedHeight(80);
+            cell2.setColspan(colspan);
+            pt.addCell(cell2);
+        } catch (BadElementException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return pt;
+    }//不是二维数组  一条一条数据添加 然后最后才for循环
+
     public static void jsonMakeArray(JsonBean jsonBean){
 
     }
@@ -691,14 +739,47 @@ public class PDFmake {
             initHeadCell(new String[]{dataUpsIns[490]+hardTest.getString("hard6")},pdfPTable);
             initHeadCell(new String[]{dataUpsIns[491]+hardTest.getString("hard7")},pdfPTable);
 
-            //其他  au img suggest opinion  time step way
+            //another_
+
+            JSONObject anotherV=ParseJson.getSubjson(jsonObject,"another_v");
+            initCell(new String[]{dataUpsIns[923]},pdfPTable);
+            sandWish(new String[]{dataUpsIns[924],dataUpsIns[925],dataUpsIns[888],dataUpsIns[888]},
+                    new String[]{anotherV.getString("bus_type"),anotherV.getString("result"),
+                            "",""},
+                    new String[]{"","","",""},pdfPTable);
+            initCell(new String[]{dataUpsIns[926]+":"+anotherV.getString("legacy")},pdfPTable);
+            initCell(new String[]{dataUpsIns[927]+":"+anotherV.getString("progress")},pdfPTable);
 
 
+            //其他  au img suggest opinion  time step way  假设 有值则做添加图片的操作 没值就不添加
+            JSONObject ano=ParseJson.getSubjson(jsonObject,"another");
 
+           //客户id 工程师id 工程师姓名 服务时间
+            String times=ano.getString("timestamp");
+            Date date=new Date(Long.parseLong(times));
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String res=simpleDateFormat.format(date);
+            sandWish(new String[]{dataUpsIns[906],dataUpsIns[907],dataUpsIns[908],dataUpsIns[909]},
+                    new String[]{ano.getString("cus_id"),ano.getString("eng_id"),
+                            ano.getString("eng_name"),res},
+                    new String[]{"","","",""},pdfPTable);
 
+            //idc_id idc_location idc_type idc_name
 
+            sandWish(new String[]{dataUpsIns[912],dataUpsIns[913],dataUpsIns[914],dataUpsIns[915]},
+                    new String[]{ano.getString("idc_id"),ano.getString("idc_name"),
+                            ano.getString("idc_location"),ano.getString("idc_type")},
+                    new String[]{"","","",""},pdfPTable);
+            //总结
+            //initHeadCell(new String[]{dataUpsIns[50]+jsonObject.getString("to_sum_up")},pdfPTable);
 
+            if (jsonObject.getInt("step")==2){
+                String blank1=jsonObject.getString("blank1");String blank2=jsonObject.getString("blank2");
+                cellAndImage(new String[]{dataUpsIns[921],dataUpsIns[922]},"d:/ftp/"+blank1,"d:/ftp/"+blank2,pdfPTable);
+            }
+            //cellAndImage(new String[]{dataUpsIns[921],dataUpsIns[922]},"d:/ftp/"+"1534389325795"+".png","d:/ftp/"+"1534389325795"+".png",pdfPTable);
 
+            //initHeadCell(new String[]{"图片测试"},pdfPTable);
 
             document.add(pdfPTable);
             document.close();
@@ -734,6 +815,9 @@ public class PDFmake {
      singleStr(this.json,"fix_suggest",str);
      singleStr(this.json,"my_sign","123");
      singleStr(this.json,"cus_sign","123");
+
+
+     pdf 初稿生成给 客户看  客户看完 也签名完了  最后 那两个图片字段也没有问题了  再生成一份历史的
 
      * @param jsonObject
      */
@@ -802,7 +886,53 @@ public class PDFmake {
                             cost.getString("transport"),cost.getString("sum_cost")},
                     new String[]{"","","",""},pdfPTable);
 
+            //another_
+
+            JSONObject anotherV=ParseJson.getSubjson(jsonObject,"another_v");
+            initCell(new String[]{dataUpsFix[923]},pdfPTable);
+            sandWish(new String[]{dataUpsFix[924],dataUpsFix[925],dataUpsFix[888],dataUpsFix[888]},
+                    new String[]{anotherV.getString("bus_type"),anotherV.getString("result"),
+                            "",""},
+                    new String[]{"","","",""},pdfPTable);
+            initCell(new String[]{dataUpsFix[926]+":"+anotherV.getString("legacy")},pdfPTable);
+            initCell(new String[]{dataUpsFix[927]+":"+anotherV.getString("progress")},pdfPTable);
+
+
             //其他
+
+            //维修建议/总结  时间  机房四项  图片
+            //initCell(new String[]{dataUpsFix[26]+":"+""},pdfPTable);
+            //initCellWithHeight()
+
+            JSONObject ano=ParseJson.getSubjson(jsonObject,"another");
+
+            //客户id 工程师id 工程师姓名 服务时间
+            String times=ano.getString("timestamp");
+            Date date=new Date(Long.parseLong(times));
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String res=simpleDateFormat.format(date);
+            sandWish(new String[]{dataUpsFix[906],dataUpsFix[907],dataUpsFix[908],dataUpsFix[909]},
+                    new String[]{ano.getString("cus_id"),ano.getString("eng_id"),
+                            ano.getString("eng_name"),res},
+                    new String[]{"","","",""},pdfPTable);
+
+            //idc_id idc_location idc_type idc_name
+
+            sandWish(new String[]{dataUpsFix[912],dataUpsFix[913],dataUpsFix[914],dataUpsFix[915]},
+                    new String[]{ano.getString("idc_id"),ano.getString("idc_name"),
+                            ano.getString("idc_location"),ano.getString("idc_type")},
+                    new String[]{"","","",""},pdfPTable);
+            //总结
+            //initHeadCell(new String[]{dataUpsIns[50]+jsonObject.getString("to_sum_up")},pdfPTable);
+
+            if (jsonObject.getInt("step")==2){
+                String blank1=jsonObject.getString("blank1");String blank2=jsonObject.getString("blank2");
+                cellAndImage(new String[]{dataUpsFix[921],dataUpsFix[922]},"d:/ftp/"+blank1,"d:/ftp/"+blank2,pdfPTable);
+                //cellAndImage(new String[]{dataUpsFix[921],dataUpsFix[922]},"d:/ftp/"+"1534389325795"+".png","d:/ftp/"+"1534389325795"+".png",pdfPTable);
+            }
+            //cellAndImage(new String[]{dataUpsFix[921],dataUpsFix[922]},"d:/ftp/"+"1534389325795"+".png","d:/ftp/"+"1534389325795"+".png",pdfPTable);
+
+            //initHeadCell(new String[]{"图片测试"},pdfPTable);
 
             document.add(pdfPTable);
 
@@ -923,7 +1053,44 @@ public class PDFmake {
                             jsonObject.getString("str2"),jsonObject.getString("str2")},
                     new String[]{"","","",""},pdfPTable);
 
+            JSONObject ano=ParseJson.getSubjson(jsonObject,"another");
 
+            //客户id 工程师id 工程师姓名 服务时间
+            String times=ano.getString("timestamp");
+            Date date=new Date(Long.parseLong(times));
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String res=simpleDateFormat.format(date);
+            sandWish(new String[]{dataUpsTest[906],dataUpsTest[907],dataUpsTest[908],dataUpsTest[909]},
+                    new String[]{ano.getString("cus_id"),ano.getString("eng_id"),
+                            ano.getString("eng_name"),res},
+                    new String[]{"","","",""},pdfPTable);
+
+            //idc_id idc_location idc_type idc_name
+
+            sandWish(new String[]{dataUpsTest[912],dataUpsTest[913],dataUpsTest[914],dataUpsTest[915]},
+                    new String[]{ano.getString("idc_id"),ano.getString("idc_name"),
+                            ano.getString("idc_location"),ano.getString("idc_type")},
+                    new String[]{"","","",""},pdfPTable);
+
+            //another_
+
+            JSONObject anotherV=ParseJson.getSubjson(jsonObject,"another_v");
+            initCell(new String[]{dataUpsTest[923]},pdfPTable);
+            sandWish(new String[]{dataUpsTest[924],dataUpsTest[925],dataUpsTest[888],dataUpsTest[888]},
+                    new String[]{anotherV.getString("bus_type"),anotherV.getString("result"),
+                            "",""},
+                    new String[]{"","","",""},pdfPTable);
+            initCell(new String[]{dataUpsTest[926]+":"+anotherV.getString("legacy")},pdfPTable);
+            initCell(new String[]{dataUpsTest[927]+":"+anotherV.getString("progress")},pdfPTable);
+
+            //总结
+            //initHeadCell(new String[]{dataUpsIns[50]+jsonObject.getString("to_sum_up")},pdfPTable);
+
+            if (jsonObject.getInt("step")==2){
+                String blank1=jsonObject.getString("blank1");String blank2=jsonObject.getString("blank2");
+                cellAndImage(new String[]{dataUpsTest[921],dataUpsTest[922]},"d:/ftp/"+blank1,"d:/ftp/"+blank2,pdfPTable);
+            }
+            //cellAndImage(new String[]{dataUpsTest[921],dataUpsTest[922]},"d:/ftp/"+"1534389325795"+".png","d:/ftp/"+"1534389325795"+".png",pdfPTable);
 
             document.add(pdfPTable);
 
@@ -1167,9 +1334,45 @@ public class PDFmake {
                     new String[]{removeHumWater.getString("dehumidifying_solenoid_valve_status"),removeHumWater.getString("contactor"),
                             removeHumWater.getString("humidifying_drainage"),removeHumWater.getString("condensate_drain")},
                     new String[]{"","","",""},pdfPTable);
+            //another_
+
+            JSONObject anotherV=ParseJson.getSubjson(jsonObject,"another_v");
+            initCell(new String[]{dataAirIns[923]},pdfPTable);
+            sandWish(new String[]{dataAirIns[924],dataAirIns[925],dataAirIns[888],dataAirIns[888]},
+                    new String[]{anotherV.getString("bus_type"),anotherV.getString("result"),
+                            "",""},
+                    new String[]{"","","",""},pdfPTable);
+            initCell(new String[]{dataAirIns[926]+":"+anotherV.getString("legacy")},pdfPTable);
+            initCell(new String[]{dataAirIns[927]+":"+anotherV.getString("progress")},pdfPTable);
+
             //其他
 
+            JSONObject ano=ParseJson.getSubjson(jsonObject,"another");
 
+            //客户id 工程师id 工程师姓名 服务时间
+            String times=ano.getString("timestamp");
+            Date date=new Date(Long.parseLong(times));
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String res=simpleDateFormat.format(date);
+            sandWish(new String[]{dataAirIns[906],dataAirIns[907],dataAirIns[908],dataAirIns[909]},
+                    new String[]{ano.getString("cus_id"),ano.getString("eng_id"),
+                            ano.getString("eng_name"),res},
+                    new String[]{"","","",""},pdfPTable);
+
+            //idc_id idc_location idc_type idc_name
+
+            sandWish(new String[]{dataAirIns[912],dataAirIns[913],dataAirIns[914],dataAirIns[915]},
+                    new String[]{ano.getString("idc_id"),ano.getString("idc_name"),
+                            ano.getString("idc_location"),ano.getString("idc_type")},
+                    new String[]{"","","",""},pdfPTable);
+            //总结
+            //initHeadCell(new String[]{dataUpsIns[50]+jsonObject.getString("to_sum_up")},pdfPTable);
+
+            if (jsonObject.getInt("step")==2){
+                String blank1=jsonObject.getString("blank1");String blank2=jsonObject.getString("blank2");
+                cellAndImage(new String[]{dataAirIns[921],dataAirIns[922]},"d:/ftp/"+blank1,"d:/ftp/"+blank2,pdfPTable);
+            }
+            //cellAndImage(new String[]{dataAirIns[921],dataAirIns[922]},"d:/ftp/"+"1534389325795"+".png","d:/ftp/"+"1534389325795"+".png",pdfPTable);
 
             document.add(pdfPTable);
 
@@ -1257,8 +1460,48 @@ public class PDFmake {
                             cost.getString("transport"),cost.getString("sum_cost")},
                     new String[]{"","","",""},pdfPTable);
 
+            //another_
+
+            JSONObject anotherV=ParseJson.getSubjson(jsonObject,"another_v");
+            initCell(new String[]{dataInstall[923]},pdfPTable);
+            sandWish(new String[]{dataInstall[924],dataInstall[925],dataInstall[888],dataInstall[888]},
+                    new String[]{anotherV.getString("bus_type"),anotherV.getString("result"),
+                            "",""},
+                    new String[]{"","","",""},pdfPTable);
+            initCell(new String[]{dataInstall[926]+":"+anotherV.getString("legacy")},pdfPTable);
+            initCell(new String[]{dataInstall[927]+":"+anotherV.getString("progress")},pdfPTable);
+
             //其他
             initCell(new String[]{dataInstall[300]},pdfPTable);
+
+
+            JSONObject ano=ParseJson.getSubjson(jsonObject,"another");
+
+            //客户id 工程师id 工程师姓名 服务时间
+            String times=ano.getString("timestamp");
+            Date date=new Date(Long.parseLong(times));
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String res=simpleDateFormat.format(date);
+            sandWish(new String[]{dataInstall[906],dataInstall[907],dataInstall[908],dataInstall[909]},
+                    new String[]{ano.getString("cus_id"),ano.getString("eng_id"),
+                            ano.getString("eng_name"),res},
+                    new String[]{"","","",""},pdfPTable);
+
+            //idc_id idc_location idc_type idc_name
+
+            sandWish(new String[]{dataInstall[912],dataInstall[913],dataInstall[914],dataInstall[915]},
+                    new String[]{ano.getString("idc_id"),ano.getString("idc_name"),
+                            ano.getString("idc_location"),ano.getString("idc_type")},
+                    new String[]{"","","",""},pdfPTable);
+            //总结
+            //initHeadCell(new String[]{dataUpsIns[50]+jsonObject.getString("to_sum_up")},pdfPTable);
+
+            if (jsonObject.getInt("step")==2){
+                String blank1=jsonObject.getString("blank1");String blank2=jsonObject.getString("blank2");
+                cellAndImage(new String[]{dataInstall[921],dataInstall[922]},"d:/ftp/"+blank1,"d:/ftp/"+blank2,pdfPTable);
+            }
+            //cellAndImage(new String[]{dataInstall[921],dataInstall[922]},"d:/ftp/"+"1534389325795"+".png","d:/ftp/"+"1534389325795"+".png",pdfPTable);
+
             document.add(pdfPTable);
 
 
@@ -1339,9 +1582,47 @@ public class PDFmake {
                             cost.getString("transport"),cost.getString("sum_cost")},
                     new String[]{"","","",""},pdfPTable);
 
+            //another_
+
+            JSONObject anotherV=ParseJson.getSubjson(jsonObject,"another_v");
+            initCell(new String[]{dataService[923]},pdfPTable);
+            sandWish(new String[]{dataService[924],dataService[925],dataService[888],dataService[888]},
+                    new String[]{anotherV.getString("bus_type"),anotherV.getString("result"),
+                           "",""},
+                    new String[]{"","","",""},pdfPTable);
+            initCell(new String[]{dataService[926]+":"+anotherV.getString("legacy")},pdfPTable);
+            initCell(new String[]{dataService[927]+":"+anotherV.getString("progress")},pdfPTable);
 
             //其他信息
             initCell(new String[]{dataService[300]},pdfPTable);
+
+            JSONObject ano=ParseJson.getSubjson(jsonObject,"another");
+
+            //客户id 工程师id 工程师姓名 服务时间
+            String times=ano.getString("timestamp");
+            Date date=new Date(Long.parseLong(times));
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String res=simpleDateFormat.format(date);
+            sandWish(new String[]{dataService[906],dataService[907],dataService[908],dataService[909]},
+                    new String[]{ano.getString("cus_id"),ano.getString("eng_id"),
+                            ano.getString("eng_name"),res},
+                    new String[]{"","","",""},pdfPTable);
+
+            //idc_id idc_location idc_type idc_name
+
+            sandWish(new String[]{dataService[912],dataService[913],dataService[914],dataService[915]},
+                    new String[]{ano.getString("idc_id"),ano.getString("idc_name"),
+                            ano.getString("idc_location"),ano.getString("idc_type")},
+                    new String[]{"","","",""},pdfPTable);
+            //总结
+            //initHeadCell(new String[]{dataUpsIns[50]+jsonObject.getString("to_sum_up")},pdfPTable);
+
+            if (jsonObject.getInt("step")==2){
+                String blank1=jsonObject.getString("blank1");String blank2=jsonObject.getString("blank2");
+                cellAndImage(new String[]{dataService[921],dataService[922]},"d:/ftp/"+blank1,"d:/ftp/"+blank2,pdfPTable);
+            }
+            //cellAndImage(new String[]{dataService[921],dataService[922]},"d:/ftp/"+"1534389325795"+".png","d:/ftp/"+"1534389325795"+".png",pdfPTable);
+
             document.add(pdfPTable);
 
 
@@ -1356,6 +1637,469 @@ public class PDFmake {
         // response.setContentType("application/pdf");
         //Document document = new Document(PageSize.A4.rotate());
         return fileName;
+    }
+
+
+    /**
+     * 空调部分 估计要超过 2000行
+     */
+    //空调维修pdf 生成
+    public static String airFixPdfMake(JSONObject jsonObject){
+        //init
+        OutputStream os = null;
+        long timestamp=TimeAndDateUtil.makeBootstamp();
+        String fileName="d:/ftp/"+timestamp+".pdf";
+
+        //initdata
+        if(dataAirFix==null)
+            dataAirFix=  ParseJson.getXmls(ParseJson.getFileFile("air_fix_data.xml"));
+        try {
+            os = new FileOutputStream(new File("d:/ftp/"+timestamp+".pdf"));
+            Document document = new Document(PageSize.A4);
+            PdfWriter pw= PdfWriter.getInstance(document, os);
+            pw.open();
+            document.open();
+            if(fonts==null)initFontArray();
+            //标题
+            Paragraph upsTestTitle = new Paragraph("空调维修报告",fonts[1]);
+            upsTestTitle.setAlignment(Element.ALIGN_CENTER);
+            document.add(upsTestTitle);
+            document.add(Chunk.NEWLINE);
+
+            PdfPTable pdfPTable=initTable(12,new int[]{16,16,16,16,16,16,16,16,16,16,16,16});
+             /* initCell(new String[]{"你若","安好","便是","晴天"},pdfPTable);
+            document.add(pdfPTable); 这样 就会有两行 今天java出bug  可以无限加入的*/
+
+            //
+            /*initCell(new String[]{"今天","java","出了","bug"},pdfPTable);
+            initCell(new String[]{"你若","安好","便是","晴天"},pdfPTable);
+            initCell(new String[]{"体系架构","网络","数据结构","操作系统"},pdfPTable);*/
+            //客户信息
+            //{"custom_contacts":"dg","phone_num":"fv","brand":"fvv","custom_location":"ccc"}
+            //{"device_id":"xv","device_type":", ","err_time":"xfxfc","fix_time":" bb"}
+            JSONObject cusData1=ParseJson.getSubjson(jsonObject,"cus_data_1");
+            JSONObject cusData2=ParseJson.getSubjson(jsonObject,"cus_data_2");
+            initCell(new String[]{dataAirFix[100]},pdfPTable);
+            sandWish(new String[]{dataAirFix[1],dataAirFix[2],dataAirFix[3],dataAirFix[4]},
+                    new String[]{cusData1.getString("custom_contacts"),cusData1.getString("custom_contacts"),
+                            cusData1.getString("phone_num"),cusData1.getString("custom_location")},
+                    new String[]{"","","",""},pdfPTable);
+
+            sandWish(new String[]{dataAirFix[5],dataAirFix[6],dataAirFix[7],dataAirFix[8]},
+                    new String[]{cusData2.getString("device_id"),cusData2.getString("device_type"),
+                            cusData2.getString("err_time"),cusData2.getString("fix_time")},
+                    new String[]{"","","",""},pdfPTable);
+
+            //故障信息  "error_phon":"xvv","error_analysis":",cvh","handle_error":",vbh","fix_reason":"xvhh",
+            initCell(new String[]{dataAirFix[11]+":"+jsonObject.getString("error_phon")},pdfPTable);
+            initCell(new String[]{dataAirFix[12]+":"+jsonObject.getString("error_analysis")},pdfPTable);
+            initCell(new String[]{dataAirFix[13]+":"+jsonObject.getString("handle_error")},pdfPTable);
+            initCell(new String[]{dataAirFix[14]+":"+jsonObject.getString("fix_reason")},pdfPTable);
+            //费用
+            JSONObject cost=ParseJson.getSubjson(jsonObject,"cost");
+            initCell(new String[]{dataAirFix[17]},pdfPTable);
+            sandWish(new String[]{dataAirFix[18],dataAirFix[19],dataAirFix[20],dataAirFix[21]},
+                    new String[]{cost.getString("Maintenance"),cost.getString("warr_inner"),
+                            cost.getString("warr_out"),cost.getString("labor")},
+                    new String[]{"","","",""},pdfPTable);
+            sandWish(new String[]{dataAirFix[22],dataAirFix[23],dataAirFix[24],dataAirFix[25]},
+                    new String[]{cost.getString("materal"),cost.getString("travel"),
+                            cost.getString("transport"),cost.getString("sum_cost")},
+                    new String[]{"","","",""},pdfPTable);
+
+            //another_
+
+            JSONObject anotherV=ParseJson.getSubjson(jsonObject,"another_v");
+            initCell(new String[]{dataAirFix[923]},pdfPTable);
+            sandWish(new String[]{dataAirFix[924],dataAirFix[925],dataAirFix[888],dataAirFix[888]},
+                    new String[]{anotherV.getString("bus_type"),anotherV.getString("result"),
+                            "",""},
+                    new String[]{"","","",""},pdfPTable);
+            initCell(new String[]{dataAirFix[926]+":"+anotherV.getString("legacy")},pdfPTable);
+            initCell(new String[]{dataAirFix[927]+":"+anotherV.getString("progress")},pdfPTable);
+
+            //其他信息
+            initCell(new String[]{dataAirFix[400]},pdfPTable);
+
+            JSONObject ano=ParseJson.getSubjson(jsonObject,"another");
+
+            //客户id 工程师id 工程师姓名 服务时间
+            String times=ano.getString("timestamp");
+            Date date=new Date(Long.parseLong(times));
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String res=simpleDateFormat.format(date);
+            sandWish(new String[]{dataAirFix[906],dataAirFix[907],dataAirFix[908],dataAirFix[909]},
+                    new String[]{ano.getString("cus_id"),ano.getString("eng_id"),
+                            ano.getString("eng_name"),res},
+                    new String[]{"","","",""},pdfPTable);
+
+            //idc_id idc_location idc_type idc_name
+
+            sandWish(new String[]{dataAirFix[912],dataAirFix[913],dataAirFix[914],dataAirFix[915]},
+                    new String[]{ano.getString("idc_id"),ano.getString("idc_name"),
+                            ano.getString("idc_location"),ano.getString("idc_type")},
+                    new String[]{"","","",""},pdfPTable);
+            //总结
+            //initHeadCell(new String[]{dataUpsIns[50]+jsonObject.getString("to_sum_up")},pdfPTable);
+
+            if (jsonObject.getInt("step")==2){
+                String blank1=jsonObject.getString("blank1");String blank2=jsonObject.getString("blank2");
+                cellAndImage(new String[]{dataAirFix[921],dataAirFix[922]},"d:/ftp/"+blank1,"d:/ftp/"+blank2,pdfPTable);
+            }
+
+
+
+
+            document.add(pdfPTable);
+
+
+            document.close();
+            pw.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        }
+        // response.setContentType("application/pdf");
+        //Document document = new Document(PageSize.A4.rotate());
+        return fileName;
+
+    }
+
+
+
+    //空调安装pdf 生成
+    public static String airInstallPdfMake(JSONObject jsonObject){
+
+        //init
+        OutputStream os = null;
+        long timestamp=TimeAndDateUtil.makeBootstamp();
+        String fileName="d:/ftp/"+timestamp+".pdf";
+
+        //initdata
+        if(dataAirInstall==null)
+            dataAirInstall=  ParseJson.getXmls(ParseJson.getFileFile("air_install_data.xml"));
+        try {
+            os = new FileOutputStream(new File("d:/ftp/"+timestamp+".pdf"));
+            Document document = new Document(PageSize.A4);
+            PdfWriter pw= PdfWriter.getInstance(document, os);
+            pw.open();
+            document.open();
+            if(fonts==null)initFontArray();
+            //标题
+            Paragraph upsTestTitle = new Paragraph("空调安装报告",fonts[1]);
+            upsTestTitle.setAlignment(Element.ALIGN_CENTER);
+            document.add(upsTestTitle);
+            document.add(Chunk.NEWLINE);
+
+            PdfPTable pdfPTable=initTable(12,new int[]{16,16,16,16,16,16,16,16,16,16,16,16});
+             /* initCell(new String[]{"你若","安好","便是","晴天"},pdfPTable);
+            document.add(pdfPTable); 这样 就会有两行 今天java出bug  可以无限加入的*/
+
+            //
+            /*initCell(new String[]{"今天","java","出了","bug"},pdfPTable);
+            initCell(new String[]{"你若","安好","便是","晴天"},pdfPTable);
+            initCell(new String[]{"体系架构","网络","数据结构","操作系统"},pdfPTable);*/
+            //客户信息
+            //{"custom_contacts":"dg","phone_num":"fv","brand":"fvv","custom_location":"ccc"}
+            //{"device_id":"xv","device_type":", ","err_time":"xfxfc","fix_time":" bb"}
+            JSONObject cusData1=ParseJson.getSubjson(jsonObject,"cus_data_1");
+            JSONObject cusData2=ParseJson.getSubjson(jsonObject,"cus_data_2");
+            initCell(new String[]{dataAirInstall[100]},pdfPTable);
+            sandWish(new String[]{dataAirInstall[1],dataAirInstall[2],dataAirInstall[3],dataAirInstall[4]},
+                    new String[]{cusData1.getString("custom_contacts"),cusData1.getString("custom_contacts"),
+                            cusData1.getString("phone_num"),cusData1.getString("custom_location")},
+                    new String[]{"","","",""},pdfPTable);
+
+            sandWish(new String[]{dataAirInstall[5],dataAirInstall[6],dataAirInstall[7],dataAirInstall[8]},
+                    new String[]{cusData2.getString("device_id"),cusData2.getString("device_type"),
+                            cusData2.getString("err_time"),cusData2.getString("fix_time")},
+                    new String[]{"","","",""},pdfPTable);
+
+        //机房信息
+            //idc_data_1":{"power_r":"","power_s":"","power_t":"","kong":""},"idc_data_2":{"temp_set":"","hum_set":"","high_wave":"","control_v":""},
+            // "idc_data_3":{"emi_cha":"","hum_cha":"","high_v":"","low_v":""},"idc_data_4":{"express_r":"","express_s":"","express_t":"","kong":""},
+
+            JSONObject idcData1=ParseJson.getSubjson(jsonObject,"idc_data_1");
+            JSONObject idcData2=ParseJson.getSubjson(jsonObject,"idc_data_2");
+            JSONObject idcData3=ParseJson.getSubjson(jsonObject,"idc_data_3");
+            JSONObject idcData4=ParseJson.getSubjson(jsonObject,"idc_data_4");
+            JSONObject idcData5=ParseJson.getSubjson(jsonObject,"idc_data_5");
+            JSONObject idcData6=ParseJson.getSubjson(jsonObject,"idc_data_6");
+            initCell(new String[]{dataAirInstall[200]},pdfPTable);
+            sandWish(new String[]{dataAirInstall[11],dataAirInstall[12],dataAirInstall[13],dataAirInstall[14]},
+                    new String[]{idcData1.getString("power_r"),idcData1.getString("power_s"),
+                            idcData1.getString("power_t"),idcData1.getString("kong")},
+                    new String[]{"","","",""},pdfPTable);
+
+            sandWish(new String[]{dataAirInstall[15],dataAirInstall[16],dataAirInstall[17],dataAirInstall[18]},
+                    new String[]{idcData2.getString("temp_set"),idcData2.getString("hum_set"),
+                            idcData2.getString("high_wave"),idcData2.getString("control_v")},
+                    new String[]{"","","",""},pdfPTable);
+
+            sandWish(new String[]{dataAirInstall[21],dataAirInstall[22],dataAirInstall[23],dataAirInstall[24]},
+                    new String[]{idcData3.getString("emi_cha"),idcData3.getString("hum_cha"),
+                            idcData3.getString("high_v"),idcData3.getString("low_v")},
+                    new String[]{"","","",""},pdfPTable);
+
+            sandWish(new String[]{dataAirInstall[25],dataAirInstall[26],dataAirInstall[27],dataAirInstall[28]},
+                    new String[]{idcData4.getString("express_r"),idcData4.getString("express_s"),
+                            idcData4.getString("express_t"),idcData4.getString("kong")},
+                    new String[]{"","","",""},pdfPTable);
+            // "idc_data_5":{"add_hot_r":"","add_hot_s":"","add_hot_t":"","kong":""},"idc_data_6":{"express_press":"","express_cha":"","kong":""}
+            sandWish(new String[]{dataAirInstall[31],dataAirInstall[32],dataAirInstall[33],dataAirInstall[34]},
+                    new String[]{idcData5.getString("add_hot_r"),idcData5.getString("add_hot_s"),
+                            idcData5.getString("add_hot_t"),idcData5.getString("kong")},
+                    new String[]{"","","",""},pdfPTable);
+
+
+            initCell(new String[]{dataAirInstall[500]},pdfPTable);
+            sandWish(new String[]{dataAirInstall[35],dataAirInstall[36],dataAirInstall[37],dataAirInstall[38]},
+                    new String[]{idcData6.getString("express_press"),idcData6.getString("express_cha"),
+                            idcData6.getString("kong"),idcData6.getString("kong")},
+                    new String[]{"","","",""},pdfPTable);
+
+            //another_
+
+            JSONObject anotherV=ParseJson.getSubjson(jsonObject,"another_v");
+            initCell(new String[]{dataAirInstall[923]},pdfPTable);
+            sandWish(new String[]{dataAirInstall[924],dataAirInstall[925],dataAirInstall[888],dataAirInstall[888]},
+                    new String[]{anotherV.getString("bus_type"),anotherV.getString("result"),
+                            "",""},
+                    new String[]{"","","",""},pdfPTable);
+            initCell(new String[]{dataAirInstall[926]+":"+anotherV.getString("legacy")},pdfPTable);
+            initCell(new String[]{dataAirInstall[927]+":"+anotherV.getString("progress")},pdfPTable);
+
+            //其他信息
+            initCell(new String[]{dataAirInstall[300]},pdfPTable);
+
+            JSONObject ano=ParseJson.getSubjson(jsonObject,"another");
+
+            //客户id 工程师id 工程师姓名 服务时间
+            String times=ano.getString("timestamp");
+            Date date=new Date(Long.parseLong(times));
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String res=simpleDateFormat.format(date);
+            sandWish(new String[]{dataAirInstall[906],dataAirInstall[907],dataAirInstall[908],dataAirInstall[909]},
+                    new String[]{ano.getString("cus_id"),ano.getString("eng_id"),
+                            ano.getString("eng_name"),res},
+                    new String[]{"","","",""},pdfPTable);
+
+            //idc_id idc_location idc_type idc_name
+
+            sandWish(new String[]{dataAirInstall[912],dataAirInstall[913],dataAirInstall[914],dataAirInstall[915]},
+                    new String[]{ano.getString("idc_id"),ano.getString("idc_name"),
+                            ano.getString("idc_location"),ano.getString("idc_type")},
+                    new String[]{"","","",""},pdfPTable);
+            //总结
+            //initHeadCell(new String[]{dataUpsIns[50]+jsonObject.getString("to_sum_up")},pdfPTable);
+
+            if (jsonObject.getInt("step")==2){
+                String blank1=jsonObject.getString("blank1");String blank2=jsonObject.getString("blank2");
+                cellAndImage(new String[]{dataAirInstall[921],dataAirInstall[922]},"d:/ftp/"+blank1,"d:/ftp/"+blank2,pdfPTable);
+            }
+
+
+            document.add(pdfPTable);
+
+
+            document.close();
+            pw.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        }
+        // response.setContentType("application/pdf");
+        //Document document = new Document(PageSize.A4.rotate());
+        return fileName;
+
+    }
+
+
+
+    //空调巡检pdf 生成
+    public static String airNewInsPdfMake(JSONObject jsonObject){
+
+        //init
+        OutputStream os = null;
+        long timestamp=TimeAndDateUtil.makeBootstamp();
+        String fileName="d:/ftp/"+timestamp+".pdf";
+
+        //initdata
+        if(dataAirInspection==null)
+            dataAirInspection=  ParseJson.getXmls(ParseJson.getFileFile("air_new_ins_data.xml"));
+        try {
+            os = new FileOutputStream(new File("d:/ftp/"+timestamp+".pdf"));
+            Document document = new Document(PageSize.A4);
+            PdfWriter pw= PdfWriter.getInstance(document, os);
+            pw.open();
+            document.open();
+            if(fonts==null)initFontArray();
+            //标题
+            Paragraph upsTestTitle = new Paragraph("空调巡检报告",fonts[1]);
+            upsTestTitle.setAlignment(Element.ALIGN_CENTER);
+            document.add(upsTestTitle);
+            document.add(Chunk.NEWLINE);
+
+            PdfPTable pdfPTable=initTable(12,new int[]{16,16,16,16,16,16,16,16,16,16,16,16});
+             /* initCell(new String[]{"你若","安好","便是","晴天"},pdfPTable);
+            document.add(pdfPTable); 这样 就会有两行 今天java出bug  可以无限加入的*/
+
+            //
+            /*initCell(new String[]{"今天","java","出了","bug"},pdfPTable);
+            initCell(new String[]{"你若","安好","便是","晴天"},pdfPTable);
+            initCell(new String[]{"体系架构","网络","数据结构","操作系统"},pdfPTable);*/
+            System.out.println(4);
+            //客户信息
+            //{"custom_contacts":"dg","phone_num":"fv","brand":"fvv","custom_location":"ccc"}
+            //{"device_id":"xv","device_type":", ","err_time":"xfxfc","fix_time":" bb"}
+            JSONObject cusData1=ParseJson.getSubjson(jsonObject,"cus_data_1");
+            JSONObject cusData2=ParseJson.getSubjson(jsonObject,"cus_data_2");
+            initCell(new String[]{dataAirInspection[100]},pdfPTable);
+            sandWish(new String[]{dataAirInspection[1],dataAirInspection[2],dataAirInspection[3],dataAirInspection[4]},
+                    new String[]{cusData1.getString("custom_contacts"),cusData1.getString("custom_contacts"),
+                            cusData1.getString("phone_num"),cusData1.getString("custom_location")},
+                    new String[]{"","","",""},pdfPTable);
+
+            sandWish(new String[]{dataAirInspection[5],dataAirInspection[6],dataAirInspection[7],dataAirInspection[8]},
+                    new String[]{cusData2.getString("device_id"),cusData2.getString("device_type"),
+                            cusData2.getString("err_time"),cusData2.getString("fix_time")},
+                    new String[]{"","","",""},pdfPTable);
+            System.out.println(5);
+            //设备信息
+            //"cus_data_1":{"custom_contacts":"cbb","phone_num":"xvg","brand":"cv","custom_location":""},"cus_data_2":{"device_id":"","device_type":"xc","err_time":"cc","fix_time":""},
+            // "cus_data_3":{"custom_contacts":"cvv","phone_num":"xff","brand":"fgh","custom_location":""},"cus_data_4":{"device_id":"","device_type":"xcv","err_time":"fg","fix_time":""},
+            // "cus_data_5":{"custom_contacts":"cc","phone_num":"cf","brand":" vcv","custom_location":""},"cus_data_6":{"device_id":"xgh","device_type":"cvg","err_time":"gh","fix_time":""}
+            JSONObject idcData1=ParseJson.getSubjson(jsonObject,"idc_data_1");
+            JSONObject idcData2=ParseJson.getSubjson(jsonObject,"idc_data_2");
+            JSONObject idcData3=ParseJson.getSubjson(jsonObject,"idc_data_3");
+            JSONObject idcData4=ParseJson.getSubjson(jsonObject,"idc_data_4");
+            JSONObject idcData5=ParseJson.getSubjson(jsonObject,"idc_data_5");
+            JSONObject idcData6=ParseJson.getSubjson(jsonObject,"idc_data_6");
+            initCell(new String[]{dataAirInspection[200]},pdfPTable);
+            sandWish(new String[]{dataAirInspection[11],dataAirInspection[12],dataAirInspection[13],dataAirInspection[14]},
+                    new String[]{idcData1.getString("power_r"),idcData1.getString("power_s"),
+                            idcData1.getString("power_t"),idcData1.getString("kong")},
+                    new String[]{"","","",""},pdfPTable);
+
+            sandWish(new String[]{dataAirInspection[15],dataAirInspection[16],dataAirInspection[17],dataAirInspection[18]},
+                    new String[]{idcData2.getString("temp_set"),idcData2.getString("hum_set"),
+                            idcData2.getString("high_wave"),idcData2.getString("control_v")},
+                    new String[]{"","","",""},pdfPTable);
+
+            sandWish(new String[]{dataAirInspection[21],dataAirInspection[22],dataAirInspection[23],dataAirInspection[24]},
+                    new String[]{idcData3.getString("emi_cha"),idcData3.getString("hum_cha"),
+                            idcData3.getString("high_v"),idcData3.getString("low_v")},
+                    new String[]{"","","",""},pdfPTable);
+
+            sandWish(new String[]{dataAirInspection[25],dataAirInspection[26],dataAirInspection[27],dataAirInspection[28]},
+                    new String[]{idcData4.getString("express_r"),idcData4.getString("express_s"),
+                            idcData4.getString("express_t"),idcData4.getString("kong")},
+                    new String[]{"","","",""},pdfPTable);
+            // "idc_data_5":{"add_hot_r":"","add_hot_s":"","add_hot_t":"","kong":""},"idc_data_6":{"express_press":"","express_cha":"","kong":""}
+            sandWish(new String[]{dataAirInspection[31],dataAirInspection[32],dataAirInspection[33],dataAirInspection[34]},
+                    new String[]{idcData5.getString("add_hot_r"),idcData5.getString("add_hot_s"),
+                            idcData5.getString("add_hot_t"),idcData5.getString("kong")},
+                    new String[]{"","","",""},pdfPTable);
+
+
+            initCell(new String[]{dataAirInspection[400]},pdfPTable);
+            sandWish(new String[]{dataAirInspection[35],dataAirInspection[36],dataAirInspection[37],dataAirInspection[38]},
+                    new String[]{idcData6.getString("express_press"),idcData6.getString("express_cha"),
+                            idcData6.getString("kong"),idcData6.getString("kong")},
+                    new String[]{"","","",""},pdfPTable);
+
+            System.out.println(6);
+            //radio
+            initCell(new String[]{"以下功能区是否正常"},pdfPTable);
+            sandWish(new String[]{dataAirInspection[41],dataAirInspection[42],dataAirInspection[43],dataAirInspection[44]},
+                    new String[]{jsonObject.getString("41"),jsonObject.getString("42"),
+                            jsonObject.getString("43"),jsonObject.getString("44")},
+                    new String[]{"","","",""},pdfPTable);
+
+            sandWish(new String[]{dataAirInspection[45],dataAirInspection[46],dataAirInspection[47],dataAirInspection[48]},
+                    new String[]{jsonObject.getString("45"),jsonObject.getString("46"),
+                            jsonObject.getString("47"),jsonObject.getString("48")},
+                    new String[]{"","","",""},pdfPTable);
+
+            sandWish(new String[]{dataAirInspection[49],dataAirInspection[50],dataAirInspection[51],dataAirInspection[52]},
+                    new String[]{jsonObject.getString("49"),jsonObject.getString("50"),
+                            jsonObject.getString("51"),jsonObject.getString("52")},
+                    new String[]{"","","",""},pdfPTable);
+
+            sandWish(new String[]{dataAirInspection[53],dataAirInspection[54],dataAirInspection[55],dataAirInspection[56]},
+                    new String[]{jsonObject.getString("53"),jsonObject.getString("54"),
+                            jsonObject.getString("55"),jsonObject.getString("56")},
+                    new String[]{"","","",""},pdfPTable);
+
+            sandWish(new String[]{dataAirInspection[57],dataAirInspection[58],dataAirInspection[59],dataAirInspection[60]},
+                    new String[]{jsonObject.getString("57"),jsonObject.getString("58"),
+                            jsonObject.getString("59"),jsonObject.getString("60")},
+                    new String[]{"","","",""},pdfPTable);
+
+            sandWish(new String[]{dataAirInspection[61],dataAirInspection[888],dataAirInspection[888],dataAirInspection[888]},
+                    new String[]{jsonObject.getString("61")," ",
+                            " "," "},
+                    new String[]{"","","",""},pdfPTable);
+            System.out.println(7);
+            //another_
+
+            JSONObject anotherV=ParseJson.getSubjson(jsonObject,"another_v");
+            initCell(new String[]{dataAirInspection[923]},pdfPTable);
+            sandWish(new String[]{dataAirInspection[924],dataAirInspection[925],dataAirInspection[888],dataAirInspection[888]},
+                    new String[]{anotherV.getString("bus_type"),anotherV.getString("result"),
+                            "",""},
+                    new String[]{"","","",""},pdfPTable);
+            initCell(new String[]{dataAirInspection[926]+":"+anotherV.getString("legacy")},pdfPTable);
+            initCell(new String[]{dataAirInspection[927]+":"+anotherV.getString("progress")},pdfPTable);
+            System.out.println(8);
+            //其他信息
+            initCell(new String[]{dataAirInspection[300]},pdfPTable);
+
+            JSONObject ano=ParseJson.getSubjson(jsonObject,"another");
+
+            //客户id 工程师id 工程师姓名 服务时间
+            String times=ano.getString("timestamp");
+            Date date=new Date(Long.parseLong(times));
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String res=simpleDateFormat.format(date);
+            sandWish(new String[]{dataAirInspection[906],dataAirInspection[907],dataAirInspection[908],dataAirInspection[909]},
+                    new String[]{ano.getString("cus_id"),ano.getString("eng_id"),
+                            ano.getString("eng_name"),res},
+                    new String[]{"","","",""},pdfPTable);
+
+            //idc_id idc_location idc_type idc_name
+
+            sandWish(new String[]{dataAirInspection[912],dataAirInspection[913],dataAirInspection[914],dataAirInspection[915]},
+                    new String[]{ano.getString("idc_id"),ano.getString("idc_name"),
+                            ano.getString("idc_location"),ano.getString("idc_type")},
+                    new String[]{"","","",""},pdfPTable);
+            //总结
+            //initHeadCell(new String[]{dataUpsIns[50]+jsonObject.getString("to_sum_up")},pdfPTable);
+
+            if (jsonObject.getInt("step")==2){
+                String blank1=jsonObject.getString("blank1");String blank2=jsonObject.getString("blank2");
+                cellAndImage(new String[]{dataAirInspection[921],dataAirInspection[922]},"d:/ftp/"+blank1,"d:/ftp/"+blank2,pdfPTable);
+            }
+
+        System.out.println(10);
+
+
+            document.add(pdfPTable);
+
+
+            document.close();
+            pw.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        }
+        // response.setContentType("application/pdf");
+        //Document document = new Document(PageSize.A4.rotate());
+        return fileName;
+
     }
 
 }

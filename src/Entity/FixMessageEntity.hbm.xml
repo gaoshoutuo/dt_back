@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="Entity.FixMessageEntity" table="fix_message" schema="dtsjwb">
+        <id name="id" column="id"/>
+        <property name="timeRecord" column="time_record"/>
+        <property name="json1" column="json_1"/>
+        <property name="json2" column="json_2"/>
+        <property name="idcId" column="idc_id"/>
+        <property name="idcName" column="idc_name"/>
+        <property name="idcLocation" column="idc_location"/>
+        <property name="idcType" column="idc_type"/>
+        <property name="userId" column="user_id"/>
+        <property name="engId" column="eng_id"/>
+        <property name="businessType" column="business_type"/>
+        <property name="isWatch" column="is_watch"/>
+        <property name="engName" column="eng_name"/>
+        <property name="blank1" column="blank_1"/>
+        <property name="blank2" column="blank_2"/>
+        <property name="blank3" column="blank_3"/>
+    </class>
+</hibernate-mapping>

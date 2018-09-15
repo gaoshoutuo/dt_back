@@ -9,5 +9,6 @@
         <property name="dateHistory" column="date_history"/>
         <property name="cusId" column="cus_id"/>
         <property name="battNumber" column="batt_number"/>
+        <property name="idcId" column="idc_id"/>
     </class>
 </hibernate-mapping>

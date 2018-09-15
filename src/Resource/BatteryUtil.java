@@ -10,6 +10,7 @@ import org.json.JSONObject;
 import java.util.List;
 
 public class BatteryUtil implements BatteryDao {
+    //不严谨好吧  多加一个idcid 字段
 
     private static BatteryUtil bu;
 
@@ -29,7 +30,20 @@ public class BatteryUtil implements BatteryDao {
 
     @Override
     public void update(BatteryNumberEntity entity) {
-
+        HibUtil hibUtil= new HibUtil();
+        hibUtil.openSession();
+        Session session=hibUtil.getSession();
+        String hql = "update BatteryNumberEntity bne set bne.battNumber = :batteryNum where bne.idcId= :idcid";
+        Query query = session.createQuery(hql);
+        query.setParameter("batteryNum",entity.getBattNumber());
+        query.setParameter("idcid",entity.getIdcId());
+        int k=query.executeUpdate();
+        // session.getTransaction().commit();
+        // session.close();
+        // System.out.println(idcId+"---------添加ups成功-----------"+upsAs); ok 一个功能成了
+        System.out.println(entity.getBattNumber()+"---------更新成功-----------");
+        hibUtil.commitT();
+        hibUtil.commitClose();
     }
 
     @Override
@@ -46,13 +60,16 @@ public class BatteryUtil implements BatteryDao {
         HibUtil hibUtil= new HibUtil();
         hibUtil.openSession();
         Session session=hibUtil.getSession();
-        String cusId=o.getString("cus_id");
+        String idcid=o.getString("idc_id");
         BatteryNumberEntity llll=null;
-        Query query=session.createQuery("select stu from BatteryNumberEntity stu where cusId=:cusid ");
-        query.setParameter("cusid",cusId);
+        Query query=session.createQuery("select stu from BatteryNumberEntity stu where idcId=:idcid ");
+        query.setParameter("idcid",idcid);
         llll=(BatteryNumberEntity)query.uniqueResult();
+        if (llll==null){
+            return 0;
+        }
         int number=llll.getBattNumber();
-
+        System.out.println(number);
         return number;
     }
 }
